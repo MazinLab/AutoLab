@@ -1,5 +1,6 @@
 # Private to this machine — not for the public repo
 CLAUDE.md
+.claude/
 docs/
 # Issue tracker database and logs stay local.
 .beads/
@@ -20,7 +21,4 @@ autolab.db
 .beads/proxieddb/
 
 .DS_Store
-.claude/settings.local.json
-.claude/build/
-.claude/skills/ben-force/build_log.jsonl
 node_modules/
