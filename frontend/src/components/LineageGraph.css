@@ -1,0 +1,58 @@
+.lineage-viewport {
+  overflow-x: auto;
+  padding: 4px;
+}
+
+.lineage-graph {
+  display: block;
+  min-width: 100%;
+}
+
+.lineage-edges line {
+  stroke: #9daaa4;
+  stroke-width: 2;
+}
+
+.lineage-edge-label {
+  paint-order: stroke;
+  fill: #62726c;
+  stroke: #fffdf8;
+  stroke-width: 5px;
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.lineage-nodes a {
+  color: inherit;
+}
+
+.lineage-nodes rect {
+  fill: #fffdf8;
+  stroke: #9eb3ab;
+  stroke-width: 1.5;
+}
+
+.lineage-nodes a:hover rect,
+.lineage-nodes a:focus rect {
+  fill: #e4f0eb;
+  stroke: #17685b;
+  stroke-width: 2.5;
+}
+
+.lineage-nodes .lineage-node--focus {
+  fill: #f6e5c8;
+  stroke: #b45f25;
+  stroke-width: 2.5;
+}
+
+.lineage-node-accession {
+  fill: #173b35;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.lineage-node-type {
+  fill: #66706a;
+  font-size: 11px;
+  text-transform: capitalize;
+}

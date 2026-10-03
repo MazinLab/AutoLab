@@ -1,0 +1,12 @@
+/* Structural styles for quick-note attachment retention. Theme colors stay
+   in the theme files; only layout and emphasis live here. */
+
+.attachment-error {
+  flex: 1 1 100%;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.retry-uploads {
+  margin-top: 8px;
+}

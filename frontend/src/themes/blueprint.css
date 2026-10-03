@@ -1,0 +1,1148 @@
+/* AutoLab — "Blueprint" light theme.
+   Engineering-drawing aesthetic per docs from the design handoff: gridded
+   paper canvas, zero radius everywhere, no shadows (structure comes from 1px
+   hairlines and heavier frames), ink navy text, ONE cyan accent (#00697f),
+   IBM Plex Sans prose, JetBrains Mono for every number, accession, timestamp,
+   and label. Status greens/ambers/reds are for status only, never decoration.
+   Fonts are self-hosted via @fontsource (imported in main.tsx) so the PWA
+   stays offline-capable.
+   Every rule is scoped under [data-theme="blueprint"]; the default cream
+   theme and the LCARS/Litho dark themes are untouched. New components need
+   rules here or they render cream-styled. */
+
+:root[data-theme="blueprint"] {
+  /* surfaces */
+  --al-bg: #e9eef3; /* app canvas — carries the grid */
+  --al-surface: #f9fbfc; /* cards, bars, panels */
+  --al-surface-2: #eef3f7; /* table headers, wells, console */
+  --al-line: #cfdae4; /* hairline dividers */
+  --al-line-strong: #9db2c4; /* frames, control borders */
+
+  /* text */
+  --al-fg: #0d2233;
+  --al-fg-muted: #3d5468;
+  --al-fg-faint: #7b93a6; /* 10px+ non-essential labels only */
+
+  /* accent — the only non-status hue in the theme */
+  --al-accent: #00697f;
+  --al-accent-fg: #fff;
+  --al-accent-soft: #dcf0f4;
+
+  /* status */
+  --al-ok: #12705a;
+  --al-ok-bg: #ddf0ea;
+  --al-ok-line: #a9d3c7;
+  --al-warn: #8f5a00;
+  --al-warn-bg: #f6ecd9;
+  --al-err: #b32d33;
+  --al-err-bg: #f8e6e7;
+  --al-err-line: #e0b4b7;
+
+  --al-grid-size: 28px;
+
+  --al-sans: "IBM Plex Sans", Helvetica, Arial, sans-serif;
+  --al-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  color: var(--al-fg);
+  background: var(--al-bg);
+  font-family: var(--al-sans);
+}
+
+/* Rules 1 + 2: zero radius, no shadows — everywhere, including components
+   added after this file was written. The scanner frame keeps its box-shadow
+   because that shadow IS the camera mask (0 0 0 999px darkening), not
+   elevation. */
+[data-theme="blueprint"] *,
+[data-theme="blueprint"] *::before,
+[data-theme="blueprint"] *::after {
+  border-radius: 0 !important;
+}
+
+[data-theme="blueprint"] :not(.scanner-frame) {
+  box-shadow: none !important;
+}
+
+/* Rule 3: the canvas carries a 28px grid. Cards sit opaque on top of it;
+   the grid never appears inside a card. */
+[data-theme="blueprint"] body {
+  background-color: var(--al-bg);
+  background-image:
+    linear-gradient(rgb(120 150 175 / 13%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(120 150 175 / 13%) 1px, transparent 1px);
+  background-size: var(--al-grid-size) var(--al-grid-size);
+  color: var(--al-fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+html[data-theme="blueprint"] {
+  background: var(--al-bg);
+}
+
+[data-theme="blueprint"] button:focus-visible,
+[data-theme="blueprint"] input:focus-visible,
+[data-theme="blueprint"] select:focus-visible,
+[data-theme="blueprint"] textarea:focus-visible,
+[data-theme="blueprint"] a:focus-visible {
+  outline: 2px solid var(--al-accent);
+  outline-offset: 2px;
+}
+
+[data-theme="blueprint"] ::selection {
+  background: rgb(0 105 127 / 16%);
+}
+
+/* ---- Shell: header, sidebar, navigation -------------------------------- */
+
+[data-theme="blueprint"] .mobile-header {
+  border-bottom: 1px solid var(--al-line-strong);
+  background: rgb(249 251 252 / 94%);
+}
+
+[data-theme="blueprint"] .brand {
+  color: var(--al-fg);
+}
+
+[data-theme="blueprint"] .brand-mark {
+  background: var(--al-fg);
+}
+
+[data-theme="blueprint"] .environment-label,
+[data-theme="blueprint"] .sidebar-kicker {
+  color: var(--al-fg-faint);
+  font-family: var(--al-mono);
+  font-size: 0.66rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+[data-theme="blueprint"] .sidebar {
+  border-top: 1px solid var(--al-line-strong);
+  background: var(--al-surface);
+}
+
+[data-theme="blueprint"] .navigation-link {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .navigation-link:hover {
+  color: var(--al-fg);
+  background: var(--al-surface-2);
+}
+
+[data-theme="blueprint"] .navigation-link--active,
+[data-theme="blueprint"] .navigation-link--active:hover {
+  color: var(--al-accent);
+  background: var(--al-accent-soft);
+}
+
+[data-theme="blueprint"] .nav-badge {
+  color: var(--al-accent-fg);
+  background: var(--al-accent);
+  font-family: var(--al-mono);
+}
+
+@media (min-width: 800px) {
+  [data-theme="blueprint"] .sidebar {
+    border-top: 0;
+    border-right: 1px solid var(--al-line-strong);
+    background: var(--al-surface);
+  }
+
+  [data-theme="blueprint"] .sidebar > .brand {
+    color: var(--al-fg);
+  }
+
+  [data-theme="blueprint"] .sidebar-status {
+    border-top: 1px solid var(--al-line);
+    color: var(--al-fg-faint);
+    font-family: var(--al-mono);
+    font-size: 0.68rem;
+  }
+}
+
+[data-theme="blueprint"] .status-dot {
+  background: var(--al-warn);
+}
+
+[data-theme="blueprint"] .sidebar-status--connected .status-dot {
+  background: var(--al-ok);
+}
+
+[data-theme="blueprint"] .sidebar-status--read-only .status-dot {
+  background: var(--al-warn);
+}
+
+[data-theme="blueprint"] .sidebar-status--offline .status-dot {
+  background: var(--al-err);
+}
+
+/* ---- Type -------------------------------------------------------------- */
+
+/* Big editorial serif reads magazine, not drawing office: headings go Plex
+   600 at drawing-title sizes. */
+[data-theme="blueprint"] h1 {
+  color: var(--al-fg);
+  font-family: var(--al-sans);
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+[data-theme="blueprint"] .browser-page h2,
+[data-theme="blueprint"] .entity-page h2,
+[data-theme="blueprint"] .form-heading h2,
+[data-theme="blueprint"] .review-card h2,
+[data-theme="blueprint"] .empty-state h2,
+[data-theme="blueprint"] .template-group h2,
+[data-theme="blueprint"] .mount-page h2,
+[data-theme="blueprint"] .recent-scans h2 {
+  color: var(--al-fg);
+  font-family: var(--al-sans);
+  font-weight: 600;
+}
+
+[data-theme="blueprint"] .browser-page h2,
+[data-theme="blueprint"] .entity-page h2 {
+  font-size: clamp(1.25rem, 3vw, 1.55rem);
+}
+
+[data-theme="blueprint"] .lede {
+  color: var(--al-fg-muted);
+}
+
+/* Caps eyebrows become mono drawing labels. */
+[data-theme="blueprint"] .eyebrow,
+[data-theme="blueprint"] .activity-day,
+[data-theme="blueprint"] .review-kind,
+[data-theme="blueprint"] .review-card__heading > span,
+[data-theme="blueprint"] .template-choice small,
+[data-theme="blueprint"] .entity-details dt,
+[data-theme="blueprint"] .linked-records small,
+[data-theme="blueprint"] .unlink-relation {
+  color: var(--al-fg-faint);
+  font-family: var(--al-mono);
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+/* Rule 4: every number is mono — accessions, timestamps, data cells. */
+[data-theme="blueprint"] .activity-time,
+[data-theme="blueprint"] .activity-accession,
+[data-theme="blueprint"] .activity-relation,
+[data-theme="blueprint"] .table-pager__range,
+[data-theme="blueprint"] .attachment-size,
+[data-theme="blueprint"] .entity-derived-label,
+[data-theme="blueprint"] .catalog-table td,
+[data-theme="blueprint"] .entity-details dd,
+[data-theme="blueprint"] .linked-records strong,
+[data-theme="blueprint"] .event-feed time,
+[data-theme="blueprint"] .event-feed code,
+[data-theme="blueprint"] .activity-entity + .activity-accession {
+  font-family: var(--al-mono);
+}
+
+[data-theme="blueprint"] .catalog-table td {
+  font-size: 0.8rem;
+}
+
+[data-theme="blueprint"] .entity-details dd {
+  font-size: 0.88rem;
+}
+
+/* ---- Cards and panels --------------------------------------------------- */
+
+[data-theme="blueprint"] .accession-form,
+[data-theme="blueprint"] .placeholder-card,
+[data-theme="blueprint"] .template-form,
+[data-theme="blueprint"] .quick-note-form,
+[data-theme="blueprint"] .review-card,
+[data-theme="blueprint"] .empty-state,
+[data-theme="blueprint"] .entity-section,
+[data-theme="blueprint"] .browser-tool,
+[data-theme="blueprint"] .catalog-table-wrap {
+  border: 1px solid var(--al-line);
+  background: var(--al-surface);
+}
+
+[data-theme="blueprint"] .placeholder-card span {
+  background: var(--al-surface-2);
+}
+
+[data-theme="blueprint"] .form-heading,
+[data-theme="blueprint"] .evidence-links {
+  border-color: var(--al-line);
+}
+
+[data-theme="blueprint"] .entity-header {
+  border-bottom: 1px solid var(--al-line-strong);
+}
+
+[data-theme="blueprint"] .danger-zone {
+  border-top: 1px solid var(--al-err-line);
+}
+
+/* Cards nested inside cards sit on the well tone. */
+[data-theme="blueprint"] .artifact-card,
+[data-theme="blueprint"] .note-card,
+[data-theme="blueprint"] .artifact-figure,
+[data-theme="blueprint"] .attachment-list li {
+  border: 1px solid var(--al-line);
+  background: #fff;
+}
+
+[data-theme="blueprint"] .artifact-card h3,
+[data-theme="blueprint"] .note-card h3,
+[data-theme="blueprint"] .artifact-figure-caption h3 {
+  color: var(--al-fg);
+}
+
+[data-theme="blueprint"] .artifact-card p,
+[data-theme="blueprint"] .note-card p,
+[data-theme="blueprint"] .artifact-figure-caption p {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .artifact-figure-caption {
+  border-top: 1px solid var(--al-line);
+}
+
+[data-theme="blueprint"] .artifact-file-type {
+  color: var(--al-fg-muted);
+  background: var(--al-surface-2);
+  font-family: var(--al-mono);
+}
+
+/* ---- Text colors -------------------------------------------------------- */
+
+[data-theme="blueprint"] .field-hint,
+[data-theme="blueprint"] .loading-message,
+[data-theme="blueprint"] .entity-activity-status,
+[data-theme="blueprint"] .entity-editor-hint,
+[data-theme="blueprint"] .print-label-hint,
+[data-theme="blueprint"] .actor-picker-note,
+[data-theme="blueprint"] .danger-zone-hint,
+[data-theme="blueprint"] .notice,
+[data-theme="blueprint"] .empty-state,
+[data-theme="blueprint"] .empty-state p,
+[data-theme="blueprint"] .mention-results > p,
+[data-theme="blueprint"] .review-card > p,
+[data-theme="blueprint"] .evidence-links,
+[data-theme="blueprint"] .scanner-status,
+[data-theme="blueprint"] .mount-shortcut,
+[data-theme="blueprint"] .recent-scans p,
+[data-theme="blueprint"] .recent-scans ul,
+[data-theme="blueprint"] .subscription-empty,
+[data-theme="blueprint"] .activity-time,
+[data-theme="blueprint"] .activity-type,
+[data-theme="blueprint"] .activity-accession,
+[data-theme="blueprint"] .activity-relation,
+[data-theme="blueprint"] .activity-actor,
+[data-theme="blueprint"] .table-pager__range,
+[data-theme="blueprint"] .attachment-size,
+[data-theme="blueprint"] .attach-selected,
+[data-theme="blueprint"] .unlink-control,
+[data-theme="blueprint"] .entity-derived-label,
+[data-theme="blueprint"] .section-heading > span,
+[data-theme="blueprint"] .search-results p,
+[data-theme="blueprint"] .search-results small,
+[data-theme="blueprint"] .entity-summary span,
+[data-theme="blueprint"] .cooldown-list span,
+[data-theme="blueprint"] .mount-success span,
+[data-theme="blueprint"] .mount-steps li,
+[data-theme="blueprint"] .template-prefix,
+[data-theme="blueprint"] .autocomplete-results button span,
+[data-theme="blueprint"] .print-label-fields label {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .event-feed time,
+[data-theme="blueprint"] .event-feed code {
+  color: var(--al-fg-faint);
+}
+
+[data-theme="blueprint"] .accession-form label,
+[data-theme="blueprint"] .template-field label,
+[data-theme="blueprint"] .attachment-label,
+[data-theme="blueprint"] .browser-tool > label,
+[data-theme="blueprint"] .table-filter,
+[data-theme="blueprint"] .activity-filter-group,
+[data-theme="blueprint"] .create-cooldown label,
+[data-theme="blueprint"] .actor-picker label,
+[data-theme="blueprint"] .notify-picker > label,
+[data-theme="blueprint"] .subscription-add label {
+  color: var(--al-fg);
+}
+
+[data-theme="blueprint"] .activity-entity,
+[data-theme="blueprint"] .event-feed strong,
+[data-theme="blueprint"] .markdown-body,
+[data-theme="blueprint"] .entity-details dd,
+[data-theme="blueprint"] .entity-summary,
+[data-theme="blueprint"] .template-choice,
+[data-theme="blueprint"] .cooldown-list button {
+  color: var(--al-fg);
+}
+
+[data-theme="blueprint"] .entity-activity-status--error,
+[data-theme="blueprint"] .field-error,
+[data-theme="blueprint"] .notice--error,
+[data-theme="blueprint"] .scanner-detail,
+[data-theme="blueprint"] .attachment-error,
+[data-theme="blueprint"] .outbox-rejected,
+[data-theme="blueprint"] .outbox-dead-summary,
+[data-theme="blueprint"] .outbox-dead-detail {
+  color: var(--al-err);
+}
+
+[data-theme="blueprint"] .actor-picker-note--acting {
+  color: var(--al-warn);
+}
+
+/* ---- Inputs ------------------------------------------------------------- */
+
+[data-theme="blueprint"] .field-row input,
+[data-theme="blueprint"] .template-field input,
+[data-theme="blueprint"] .template-field select,
+[data-theme="blueprint"] .template-field textarea,
+[data-theme="blueprint"] .browser-tool input,
+[data-theme="blueprint"] .table-filter input,
+[data-theme="blueprint"] .activity-filter-group select,
+[data-theme="blueprint"] .actor-picker select,
+[data-theme="blueprint"] .print-label-fields select,
+[data-theme="blueprint"] .attach-form select,
+[data-theme="blueprint"] .add-link-form select,
+[data-theme="blueprint"] .add-link-form input,
+[data-theme="blueprint"] .create-cooldown input,
+[data-theme="blueprint"] .markdown-editor {
+  border: 1px solid var(--al-line-strong);
+  color: var(--al-fg);
+  background: #fff;
+}
+
+[data-theme="blueprint"] .field-row input::placeholder,
+[data-theme="blueprint"] .template-field input::placeholder,
+[data-theme="blueprint"] .browser-tool input::placeholder {
+  color: var(--al-fg-faint);
+}
+
+[data-theme="blueprint"] .autocomplete-results,
+[data-theme="blueprint"] .search-results {
+  border: 1px solid var(--al-line-strong);
+  background: #fff;
+}
+
+[data-theme="blueprint"] .autocomplete-results button,
+[data-theme="blueprint"] .search-results a {
+  color: var(--al-fg);
+}
+
+[data-theme="blueprint"] .search-results a {
+  border-top: 1px solid var(--al-line);
+}
+
+[data-theme="blueprint"] .autocomplete-results button:hover,
+[data-theme="blueprint"] .search-results a:hover,
+[data-theme="blueprint"] .notify-results button:hover {
+  background: var(--al-accent-soft);
+}
+
+/* ---- Buttons ------------------------------------------------------------ */
+
+/* All controls speak mono caps. Three variants: outline (default),
+   solid accent (primary), red outline (danger). */
+[data-theme="blueprint"] .primary-button,
+[data-theme="blueprint"] .secondary-button,
+[data-theme="blueprint"] .field-row button,
+[data-theme="blueprint"] .quick-actions button,
+[data-theme="blueprint"] .compact-field-row button,
+[data-theme="blueprint"] .action-toggle,
+[data-theme="blueprint"] .theme-toggle,
+[data-theme="blueprint"] .entity-action-link,
+[data-theme="blueprint"] .attach-source,
+[data-theme="blueprint"] .attachment-camera,
+[data-theme="blueprint"] .entity-field-actions .text-button,
+[data-theme="blueprint"] .attach-form button[type="submit"],
+[data-theme="blueprint"] .add-link-form button[type="submit"],
+[data-theme="blueprint"] .create-cooldown button,
+[data-theme="blueprint"] .retry-action,
+[data-theme="blueprint"] .secondary-action,
+[data-theme="blueprint"] .unlink-button,
+[data-theme="blueprint"] .danger-button,
+[data-theme="blueprint"] .outbox-flush,
+[data-theme="blueprint"] .outbox-dismiss,
+[data-theme="blueprint"] .outbox-copy,
+[data-theme="blueprint"] .outbox-discard,
+[data-theme="blueprint"] .link-login-button,
+[data-theme="blueprint"] .subscription-row button,
+[data-theme="blueprint"] .subscription-add button {
+  border: 1px solid var(--al-line-strong);
+  color: var(--al-fg-muted);
+  background: var(--al-surface);
+  font-family: var(--al-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+[data-theme="blueprint"] .secondary-button:hover,
+[data-theme="blueprint"] .quick-actions button:hover,
+[data-theme="blueprint"] .action-toggle:hover,
+[data-theme="blueprint"] .theme-toggle:hover,
+[data-theme="blueprint"] .entity-action-link:hover,
+[data-theme="blueprint"] .attach-source:hover {
+  border-color: var(--al-fg-faint);
+  color: var(--al-fg);
+  background: var(--al-surface);
+}
+
+[data-theme="blueprint"] .primary-button,
+[data-theme="blueprint"] .field-row button,
+[data-theme="blueprint"] .compact-field-row button,
+[data-theme="blueprint"] .attach-form button[type="submit"],
+[data-theme="blueprint"] .add-link-form button[type="submit"],
+[data-theme="blueprint"] .create-cooldown button,
+[data-theme="blueprint"] .retry-action,
+[data-theme="blueprint"] .secondary-action,
+[data-theme="blueprint"] .action-toggle--active {
+  border-color: var(--al-accent);
+  color: var(--al-accent-fg);
+  background: var(--al-accent);
+}
+
+[data-theme="blueprint"] .field-row button:hover,
+[data-theme="blueprint"] .primary-button:hover {
+  background: #00596c;
+}
+
+[data-theme="blueprint"] .danger-button,
+[data-theme="blueprint"] .unlink-button:hover {
+  border-color: var(--al-err-line);
+  color: var(--al-err);
+  background: transparent;
+}
+
+[data-theme="blueprint"] .danger-button:hover {
+  background: var(--al-err-bg);
+}
+
+[data-theme="blueprint"] .confirm-armed {
+  border-color: var(--al-err) !important;
+  color: #fff !important;
+  background: var(--al-err) !important;
+}
+
+[data-theme="blueprint"] .text-button,
+[data-theme="blueprint"] .attachment-browse {
+  color: var(--al-accent);
+}
+
+[data-theme="blueprint"] .quick-actions button span {
+  color: var(--al-accent);
+}
+
+[data-theme="blueprint"] .template-choice {
+  border: 1px solid var(--al-line);
+  background: var(--al-surface);
+}
+
+[data-theme="blueprint"] .template-choice:hover {
+  border-color: var(--al-accent);
+  background: var(--al-accent-soft);
+}
+
+[data-theme="blueprint"] .template-prefix {
+  border: 1px solid var(--al-line);
+  font-family: var(--al-mono);
+}
+
+/* ---- Chips and pills ---------------------------------------------------- */
+
+[data-theme="blueprint"] .entity-identity span,
+[data-theme="blueprint"] .activity-action,
+[data-theme="blueprint"] .notify-chip,
+[data-theme="blueprint"] .recent-scans a {
+  font-family: var(--al-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+[data-theme="blueprint"] .entity-identity span {
+  border: 1px solid var(--al-line-strong);
+  color: var(--al-fg-muted);
+  background: var(--al-surface);
+}
+
+[data-theme="blueprint"] .entity-identity span:first-child {
+  border-color: var(--al-accent);
+  color: var(--al-accent);
+  background: var(--al-accent-soft);
+}
+
+[data-theme="blueprint"] .activity-action {
+  border: 1px solid var(--al-line-strong);
+  color: var(--al-fg-muted);
+  background: var(--al-surface-2);
+}
+
+[data-theme="blueprint"] .activity-action--deleted {
+  border-color: var(--al-err-line);
+  color: var(--al-err);
+  background: var(--al-err-bg);
+}
+
+[data-theme="blueprint"] .notify-chip,
+[data-theme="blueprint"] .recent-scans a {
+  border: 1px solid var(--al-accent);
+  color: var(--al-accent);
+  background: var(--al-accent-soft);
+}
+
+/* ---- Messages and status blocks ----------------------------------------- */
+
+[data-theme="blueprint"] .form-message--error,
+[data-theme="blueprint"] .mount-error,
+[data-theme="blueprint"] .outbox-dead {
+  border: 1px solid var(--al-err-line);
+  color: var(--al-err);
+  background: var(--al-err-bg);
+}
+
+[data-theme="blueprint"] .form-message--success,
+[data-theme="blueprint"] .success-card {
+  border: 1px solid var(--al-ok-line);
+  color: var(--al-ok);
+  background: var(--al-ok-bg);
+}
+
+[data-theme="blueprint"] .success-card p {
+  color: var(--al-ok);
+}
+
+[data-theme="blueprint"] .form-message a,
+[data-theme="blueprint"] .success-card a,
+[data-theme="blueprint"] .evidence-links a {
+  color: var(--al-accent);
+}
+
+[data-theme="blueprint"] .outbox-flush {
+  border-color: var(--al-warn);
+  color: var(--al-warn);
+  background: var(--al-warn-bg);
+}
+
+/* ---- Activity feed and event history ------------------------------------ */
+
+[data-theme="blueprint"] .activity-row {
+  border-bottom: 1px solid var(--al-line);
+}
+
+[data-theme="blueprint"] .event-feed li {
+  border-bottom: 1px solid var(--al-line);
+}
+
+[data-theme="blueprint"] .subscription-row {
+  border-bottom: 1px solid var(--al-line);
+}
+
+/* ---- Tables ------------------------------------------------------------- */
+
+[data-theme="blueprint"] .catalog-table th {
+  color: var(--al-fg-faint);
+  background: var(--al-surface-2);
+  border-bottom: 1px solid var(--al-line);
+  font-family: var(--al-mono);
+  font-size: 0.64rem;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+}
+
+[data-theme="blueprint"] .catalog-table th,
+[data-theme="blueprint"] .catalog-table td {
+  border-bottom: 1px solid var(--al-line);
+}
+
+[data-theme="blueprint"] .catalog-table td {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .catalog-table td:first-child a {
+  color: var(--al-accent);
+  font-weight: 500;
+}
+
+/* ---- Linked records, related items -------------------------------------- */
+
+[data-theme="blueprint"] .linked-records a {
+  border: 1px solid var(--al-line);
+  background: var(--al-surface);
+  color: var(--al-fg);
+}
+
+[data-theme="blueprint"] .linked-records a:hover {
+  border-color: var(--al-accent);
+  background: var(--al-accent-soft);
+}
+
+[data-theme="blueprint"] .linked-records span {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .artifact-card a,
+[data-theme="blueprint"] .artifact-figure-caption a {
+  color: var(--al-accent);
+}
+
+[data-theme="blueprint"] .entity-details div {
+  border: 1px solid var(--al-line);
+  background: var(--al-surface-2);
+}
+
+/* Fab flow: a run sheet reads as a drawing table — square step numbers, mono
+   for the numeric and identity columns. */
+[data-theme="blueprint"] .fab-flow li {
+  border: 1px solid var(--al-line);
+  background: #fff;
+}
+
+[data-theme="blueprint"] .fab-flow-index {
+  color: var(--al-accent);
+  background: var(--al-accent-soft);
+  border: 1px solid var(--al-accent);
+  font-family: var(--al-mono);
+  font-weight: 500;
+}
+
+[data-theme="blueprint"] .fab-flow-title {
+  color: var(--al-fg);
+}
+
+[data-theme="blueprint"] .fab-flow-meta {
+  color: var(--al-fg-muted);
+  font-family: var(--al-mono);
+  font-size: 0.76rem;
+}
+
+[data-theme="blueprint"] .fab-flow-note {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .fab-flow-refs a {
+  color: var(--al-accent);
+}
+
+[data-theme="blueprint"] .fab-flow-accession {
+  color: var(--al-fg-faint);
+  font-family: var(--al-mono);
+}
+
+/* ---- Lineage graph ------------------------------------------------------ */
+
+[data-theme="blueprint"] .lineage-edges line {
+  stroke: var(--al-line-strong);
+  stroke-width: 1;
+}
+
+[data-theme="blueprint"] .lineage-edge-label {
+  fill: var(--al-fg-faint);
+  stroke: var(--al-surface);
+  font-family: var(--al-mono);
+  font-size: 10px;
+}
+
+[data-theme="blueprint"] .lineage-nodes rect {
+  fill: #fff;
+  stroke: var(--al-line-strong);
+  stroke-width: 1;
+  /* The border-radius reset can't reach SVG rx attributes; zero it here. */
+  rx: 0;
+}
+
+[data-theme="blueprint"] .lineage-nodes a:hover rect,
+[data-theme="blueprint"] .lineage-nodes a:focus rect {
+  fill: var(--al-accent-soft);
+  stroke: var(--al-accent);
+  stroke-width: 1.5;
+}
+
+[data-theme="blueprint"] .lineage-nodes .lineage-node--focus {
+  fill: var(--al-accent-soft);
+  stroke: var(--al-accent);
+  stroke-width: 2;
+}
+
+[data-theme="blueprint"] .lineage-node-accession {
+  fill: var(--al-fg);
+  font-family: var(--al-mono);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+[data-theme="blueprint"] .lineage-node-type {
+  fill: var(--al-fg-faint);
+  font-family: var(--al-mono);
+  font-size: 10px;
+}
+
+/* ---- Markdown ----------------------------------------------------------- */
+
+[data-theme="blueprint"] .markdown-body h1,
+[data-theme="blueprint"] .markdown-body h2,
+[data-theme="blueprint"] .markdown-body h3,
+[data-theme="blueprint"] .markdown-body h4,
+[data-theme="blueprint"] .markdown-body h5,
+[data-theme="blueprint"] .markdown-body h6 {
+  color: var(--al-fg);
+  font-family: var(--al-sans);
+  font-weight: 600;
+}
+
+[data-theme="blueprint"] .markdown-body code {
+  background: var(--al-surface-2);
+  font-family: var(--al-mono);
+}
+
+/* The console well: light in Blueprint, framed, mono. */
+[data-theme="blueprint"] .markdown-body pre {
+  border: 1px solid var(--al-line);
+  background: var(--al-surface-2);
+  color: var(--al-fg);
+}
+
+[data-theme="blueprint"] .markdown-body blockquote {
+  border-left: 3px solid var(--al-line-strong);
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .markdown-body hr {
+  border-top: 1px solid var(--al-line);
+}
+
+[data-theme="blueprint"] .markdown-body th,
+[data-theme="blueprint"] .markdown-body td {
+  border: 1px solid var(--al-line);
+}
+
+[data-theme="blueprint"] .markdown-body th {
+  background: var(--al-surface-2);
+  font-family: var(--al-mono);
+  font-size: 0.78em;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+[data-theme="blueprint"] .markdown-body td {
+  font-family: var(--al-mono);
+  font-size: 0.85em;
+}
+
+[data-theme="blueprint"] .markdown-body a {
+  color: var(--al-accent);
+}
+
+[data-theme="blueprint"] .markdown-toolbar {
+  border-bottom: 1px solid var(--al-line);
+  background: var(--al-surface-2);
+}
+
+[data-theme="blueprint"] .markdown-tool,
+[data-theme="blueprint"] .markdown-tab {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .markdown-tool:hover:not(:disabled),
+[data-theme="blueprint"] .markdown-tab[aria-pressed="true"] {
+  color: var(--al-fg);
+  background: var(--al-accent-soft);
+}
+
+/* ---- Attachments -------------------------------------------------------- */
+
+[data-theme="blueprint"] .attachment-dropzone {
+  border: 2px dashed var(--al-line-strong);
+  color: var(--al-fg-muted);
+  background: var(--al-surface);
+}
+
+[data-theme="blueprint"] .attachment-dropzone--active {
+  border-color: var(--al-accent);
+  background: var(--al-accent-soft);
+}
+
+[data-theme="blueprint"] .attachment-camera {
+  color: var(--al-accent);
+}
+
+/* ---- Template groups: one accent means no per-group hues. --------------- */
+
+[data-theme="blueprint"] .template-group--fab,
+[data-theme="blueprint"] .template-group--testing,
+[data-theme="blueprint"] .template-group--other {
+  border-color: var(--al-line);
+  background: var(--al-surface-2);
+}
+
+[data-theme="blueprint"] .template-group--fab h2,
+[data-theme="blueprint"] .template-group--testing h2 {
+  color: var(--al-fg);
+}
+
+/* ---- Scanner and mount flow --------------------------------------------- */
+
+[data-theme="blueprint"] .scanner-viewport {
+  background: var(--al-fg);
+}
+
+[data-theme="blueprint"] .scanner-frame {
+  border: 2px solid var(--al-accent-soft);
+}
+
+[data-theme="blueprint"] .mount-steps span {
+  border: 1px solid var(--al-line-strong);
+}
+
+[data-theme="blueprint"] .mount-steps .mount-step--active {
+  color: var(--al-accent);
+}
+
+[data-theme="blueprint"] .mount-step--active span {
+  border-color: var(--al-accent);
+  color: var(--al-accent-fg);
+  background: var(--al-accent);
+}
+
+[data-theme="blueprint"] .entity-summary {
+  background: var(--al-surface-2);
+  border: 1px solid var(--al-line);
+}
+
+[data-theme="blueprint"] .cooldown-list button,
+[data-theme="blueprint"] .mount-success a {
+  border: 1px solid var(--al-line);
+  background: var(--al-surface);
+}
+
+[data-theme="blueprint"] .cooldown-list button:hover {
+  border-color: var(--al-accent);
+}
+
+[data-theme="blueprint"] .mount-success a {
+  color: var(--al-accent);
+}
+
+[data-theme="blueprint"] .create-cooldown,
+[data-theme="blueprint"] .recent-scans {
+  border-top: 1px solid var(--al-line-strong);
+}
+
+[data-theme="blueprint"] .mount-shortcut a {
+  color: var(--al-accent);
+}
+
+/* ---- Misc chrome -------------------------------------------------------- */
+
+[data-theme="blueprint"] .notify-picker {
+  border: 1px dashed var(--al-line-strong);
+}
+
+[data-theme="blueprint"] .quick-note-form code {
+  color: var(--al-accent);
+  font-family: var(--al-mono);
+}
+
+[data-theme="blueprint"] .image-lightbox {
+  background: rgb(13 34 51 / 90%);
+}
+
+[data-theme="blueprint"] .image-lightbox-close {
+  background: rgb(255 255 255 / 16%);
+}
+
+[data-theme="blueprint"] .active-setup-chip {
+  border: 1px solid var(--al-accent);
+  color: var(--al-accent);
+  background: var(--al-accent-soft);
+  font-family: var(--al-mono);
+  font-size: 0.8rem;
+}
+
+/* ---- Projects (2026-09-09) ---------------------------------------------- */
+
+[data-theme="blueprint"] .pill {
+  border: 1px solid var(--al-line-strong);
+  background: var(--al-surface-2);
+  color: var(--al-fg-muted);
+  font-family: var(--al-mono);
+}
+
+[data-theme="blueprint"] .pill--status-active {
+  border-color: var(--al-ok-line);
+  background: var(--al-ok-bg);
+  color: var(--al-ok);
+}
+
+[data-theme="blueprint"] .pill--status-on_hold {
+  background: var(--al-warn-bg);
+  color: var(--al-warn);
+}
+
+[data-theme="blueprint"] .pill--overdue {
+  border-color: var(--al-err-line);
+  background: var(--al-err-bg);
+  color: var(--al-err);
+}
+
+[data-theme="blueprint"] .project-lead,
+[data-theme="blueprint"] .project-progress,
+[data-theme="blueprint"] .project-item-meta,
+[data-theme="blueprint"] .project-work-list small,
+[data-theme="blueprint"] .project-activity-time,
+[data-theme="blueprint"] .project-work-block h3 span,
+[data-theme="blueprint"] .filter-chip {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .project-progress-bar {
+  border: 1px solid var(--al-line);
+  background: var(--al-surface-2);
+}
+
+[data-theme="blueprint"] .project-progress-fill {
+  background: var(--al-accent);
+}
+
+[data-theme="blueprint"] .project-item,
+[data-theme="blueprint"] .project-work-list li + li,
+[data-theme="blueprint"] .project-activity li {
+  border-color: var(--al-line);
+}
+
+[data-theme="blueprint"] .project-item--done .project-item-title {
+  color: var(--al-fg-faint);
+}
+
+[data-theme="blueprint"] .project-card {
+  display: grid;
+}
+
+[data-theme="blueprint"] .project-card .active-setup-name {
+  color: var(--al-fg);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+[data-theme="blueprint"] .text-button--danger {
+  color: var(--al-err);
+}
+
+[data-theme="blueprint"] .field-hint {
+  color: var(--al-warn);
+}
+
+[data-theme="blueprint"] .template-group--projects {
+  border-color: var(--al-line-strong);
+  background: var(--al-surface);
+}
+
+[data-theme="blueprint"] .template-group--projects h2 {
+  color: var(--al-accent);
+}
+
+/* ---- Setup designer (2026-09-09) ---------------------------------------- */
+
+[data-theme="blueprint"] .setup-panel,
+[data-theme="blueprint"] .setup-feedline {
+  border: 1px solid var(--al-line);
+  background: var(--al-surface);
+}
+
+[data-theme="blueprint"] .setup-palette-item:hover {
+  background: var(--al-surface-2);
+}
+
+[data-theme="blueprint"] .setup-palette-item small,
+[data-theme="blueprint"] .setup-inspector dt,
+[data-theme="blueprint"] .setup-numbers dt,
+[data-theme="blueprint"] .setup-results-status,
+[data-theme="blueprint"] .setup-saved-diff,
+[data-theme="blueprint"] .setup-feedline th {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .setup-results-status--stale,
+[data-theme="blueprint"] .setup-warnings,
+[data-theme="blueprint"] .setup-draft-notice {
+  color: var(--al-warn);
+}
+
+[data-theme="blueprint"] .rf-band-fill {
+  fill: var(--al-surface);
+}
+
+[data-theme="blueprint"] .rf-band-fill--even {
+  fill: var(--al-surface-2);
+}
+
+/* The port-number halo must match the band behind it in every theme. */
+[data-theme="blueprint"] .rf-port-label {
+  stroke: var(--al-surface);
+}
+
+[data-theme="blueprint"] .rf-band-label {
+  fill: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .rf-chain-label,
+[data-theme="blueprint"] .rf-feedline-label,
+[data-theme="blueprint"] .rf-port-label,
+[data-theme="blueprint"] .rf-part-label {
+  fill: var(--al-fg);
+}
+
+[data-theme="blueprint"] .rf-line,
+[data-theme="blueprint"] .rf-glyph,
+[data-theme="blueprint"] .rf-glyph-line {
+  stroke: var(--al-fg);
+}
+
+[data-theme="blueprint"] .rf-glyph {
+  fill: var(--al-surface);
+}
+
+[data-theme="blueprint"] .rf-glyph--coax {
+  fill: var(--al-line);
+}
+
+[data-theme="blueprint"] .rf-glyph-dot {
+  fill: var(--al-fg);
+}
+
+[data-theme="blueprint"] .rf-device rect,
+[data-theme="blueprint"] .rf-device text {
+  fill: var(--al-accent);
+}
+
+[data-theme="blueprint"] .rf-part--selected .rf-part-hit,
+[data-theme="blueprint"] .rf-drop--armed {
+  stroke: var(--al-accent);
+  fill: var(--al-accent-soft);
+}
+
+[data-theme="blueprint"] .setup-panel--collapsible summary small {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .setup-chain-direction,
+[data-theme="blueprint"] .icon-button {
+  color: var(--al-fg-muted);
+}
+
+[data-theme="blueprint"] .icon-button:hover {
+  background: var(--al-surface-2);
+  color: var(--al-err);
+}

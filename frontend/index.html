@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#e9eef3" />
+    <meta
+      name="description"
+      content="AutoLab data catalog and electronic lab notebook"
+    />
+    <title>AutoLab</title>
+    <script>
+      // Apply the stored theme before first paint so the page never flashes
+      // another theme while React mounts. Mirrors storedTheme() in theme.ts.
+      (function () {
+        var theme = "blueprint";
+        try {
+          var stored = localStorage.getItem("autolab-theme");
+          if (["default", "lcars", "litho", "blueprint"].includes(stored)) {
+            theme = stored;
+          }
+        } catch (error) {
+          /* storage unavailable: fall through to the default */
+        }
+        if (theme !== "default") {
+          document.documentElement.dataset.theme = theme;
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

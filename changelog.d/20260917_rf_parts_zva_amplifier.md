@@ -1,0 +1,1 @@
+The RF parts library gains a room temperature Mini-Circuits ZVA amplifier (output side, 300 K stage, bindable to an instrument). Library gain and noise values are typical ZVA figures (26 dB, 3 dB noise figure); bind a catalog instrument to override them. The schematic labels it "ZVA".

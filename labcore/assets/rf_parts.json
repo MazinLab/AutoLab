@@ -1,0 +1,298 @@
+{
+  "version": 1,
+  "parts": [
+    {
+      "id": "attenuator_0db",
+      "label": "0 dB attenuator (thru)",
+      "category": "attenuator",
+      "symbol": "attenuator",
+      "gain_db": 0,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input"
+      ],
+      "default_stage": "4k"
+    },
+    {
+      "id": "attenuator_3db",
+      "label": "3 dB attenuator",
+      "category": "attenuator",
+      "symbol": "attenuator",
+      "gain_db": -3,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input"
+      ],
+      "default_stage": "4k"
+    },
+    {
+      "id": "attenuator_6db",
+      "label": "6 dB attenuator",
+      "category": "attenuator",
+      "symbol": "attenuator",
+      "gain_db": -6,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input"
+      ],
+      "default_stage": "4k"
+    },
+    {
+      "id": "attenuator_10db",
+      "label": "10 dB attenuator",
+      "category": "attenuator",
+      "symbol": "attenuator",
+      "gain_db": -10,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input"
+      ],
+      "default_stage": "4k"
+    },
+    {
+      "id": "attenuator_20db",
+      "label": "20 dB attenuator",
+      "category": "attenuator",
+      "symbol": "attenuator",
+      "gain_db": -20,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input"
+      ],
+      "default_stage": "4k"
+    },
+    {
+      "id": "attenuator_30db",
+      "label": "30 dB attenuator",
+      "category": "attenuator",
+      "symbol": "attenuator",
+      "gain_db": -30,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input"
+      ],
+      "default_stage": "mxc"
+    },
+    {
+      "id": "isolator",
+      "label": "Isolator",
+      "category": "isolator",
+      "symbol": "isolator",
+      "gain_db": -0.3,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input",
+        "output"
+      ],
+      "default_stage": "mxc"
+    },
+    {
+      "id": "circulator",
+      "label": "Circulator",
+      "category": "circulator",
+      "symbol": "circulator",
+      "gain_db": -0.3,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input",
+        "output"
+      ],
+      "default_stage": "mxc"
+    },
+    {
+      "id": "switch_6way",
+      "label": "Six way RF switch",
+      "category": "switch",
+      "symbol": "switch",
+      "gain_db": -0.5,
+      "noise_temp_k": null,
+      "ports": 6,
+      "bindable": false,
+      "directions": [
+        "input",
+        "output"
+      ],
+      "default_stage": "4k"
+    },
+    {
+      "id": "coax_nbti",
+      "label": "NbTi coax",
+      "category": "coax",
+      "symbol": "coax",
+      "gain_db": -0.2,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input",
+        "output"
+      ],
+      "default_stage": "still"
+    },
+    {
+      "id": "coax_stainless",
+      "label": "Stainless coax",
+      "category": "coax",
+      "symbol": "coax",
+      "gain_db": -1.5,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input",
+        "output"
+      ],
+      "default_stage": "4k"
+    },
+    {
+      "id": "coax_copper",
+      "label": "Copper coax",
+      "category": "coax",
+      "symbol": "coax",
+      "gain_db": -0.3,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input",
+        "output"
+      ],
+      "default_stage": "mxc"
+    },
+    {
+      "id": "bandpass_4_8",
+      "label": "4 to 8 GHz bandpass filter",
+      "category": "filter",
+      "symbol": "filter",
+      "gain_db": -1,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [
+        "input",
+        "output"
+      ],
+      "default_stage": "4k"
+    },
+    {
+      "id": "hemt",
+      "label": "HEMT amplifier",
+      "category": "amplifier",
+      "symbol": "amplifier",
+      "gain_db": 38,
+      "noise_temp_k": 2.0,
+      "ports": 0,
+      "bindable": true,
+      "directions": [
+        "output"
+      ],
+      "default_stage": "4k"
+    },
+    {
+      "id": "paramp",
+      "label": "Parametric amplifier",
+      "category": "amplifier",
+      "symbol": "amplifier",
+      "gain_db": 20,
+      "noise_temp_k": 0.3,
+      "ports": 0,
+      "bindable": true,
+      "directions": [
+        "output"
+      ],
+      "default_stage": "mxc"
+    },
+    {
+      "id": "amp_zva",
+      "label": "Mini-Circuits ZVA amplifier",
+      "category": "amplifier",
+      "symbol": "amplifier",
+      "gain_db": 26,
+      "noise_temp_k": 290,
+      "ports": 0,
+      "bindable": true,
+      "directions": [
+        "output"
+      ],
+      "default_stage": "rt"
+    },
+    {
+      "id": "fiber_smf",
+      "label": "Single mode fiber",
+      "category": "optical",
+      "symbol": "fiber",
+      "gain_db": null,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [],
+      "default_stage": "mxc",
+      "destination": "device"
+    },
+    {
+      "id": "fiber_mmf",
+      "label": "Multimode fiber",
+      "category": "optical",
+      "symbol": "fiber",
+      "gain_db": null,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [],
+      "default_stage": "mxc",
+      "destination": "device"
+    },
+    {
+      "id": "window_quartz",
+      "label": "Quartz window",
+      "category": "optical",
+      "symbol": "window",
+      "gain_db": null,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [],
+      "default_stage": "4k"
+    },
+    {
+      "id": "filter_asahi",
+      "label": "Asahi filter",
+      "category": "optical",
+      "symbol": "filter",
+      "gain_db": null,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [],
+      "default_stage": "4k"
+    },
+    {
+      "id": "filter_mec",
+      "label": "MEC filter",
+      "category": "optical",
+      "symbol": "filter",
+      "gain_db": null,
+      "noise_temp_k": null,
+      "ports": 0,
+      "bindable": false,
+      "directions": [],
+      "default_stage": "4k"
+    }
+  ]
+}

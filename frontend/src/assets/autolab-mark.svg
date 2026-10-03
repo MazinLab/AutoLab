@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="80%">
+      <stop offset="0%" stop-color="#13273f"/>
+      <stop offset="100%" stop-color="#080f1c"/>
+    </radialGradient>
+    <radialGradient id="wafer" cx="42%" cy="36%" r="85%">
+      <stop offset="0%" stop-color="#3a5a7a"/>
+      <stop offset="55%" stop-color="#274460"/>
+      <stop offset="100%" stop-color="#16293f"/>
+    </radialGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="waferdisk">
+      <path d="M 376.4 855 A 380 380 0 1 1 647.6 855 Z"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+
+  <!-- wafer: circle r380 centered (512,500) with a subtle bottom flat -->
+  <path d="M 376.4 855 A 380 380 0 1 1 647.6 855 Z"
+        fill="url(#wafer)" stroke="#5d82a6" stroke-width="7"/>
+
+  <!-- die grid -->
+  <g clip-path="url(#waferdisk)" stroke="#7fa3c4" stroke-width="2.5" opacity="0.35">
+    <path d="M262 0V1024 M387 0V1024 M637 0V1024 M762 0V1024"/>
+    <path d="M0 245H1024 M0 370H1024 M0 620H1024 M0 745H1024"/>
+  </g>
+
+  <!-- gold MKID: feedline, coupler, IDC, meander inductor -->
+  <g clip-path="url(#waferdisk)" filter="url(#glow)">
+    <!-- feedline across the wafer -->
+    <rect x="120" y="222" width="784" height="20" rx="10" fill="#f2b437"/>
+    <!-- coupler bar -->
+    <rect x="392" y="278" width="240" height="16" rx="8" fill="#f2b437"/>
+    <rect x="500" y="278" width="24" height="42" fill="#f2b437"/>
+    <!-- interdigitated capacitor -->
+    <g fill="#f2b437">
+      <rect x="352" y="320" width="320" height="18" rx="9"/>
+      <rect x="384" y="338" width="18" height="96"/>
+      <rect x="448" y="338" width="18" height="96"/>
+      <rect x="512" y="338" width="18" height="96"/>
+      <rect x="576" y="338" width="18" height="96"/>
+      <rect x="640" y="338" width="18" height="96"/>
+      <rect x="416" y="382" width="18" height="96" opacity="0.92"/>
+      <rect x="480" y="382" width="18" height="96" opacity="0.92"/>
+      <rect x="544" y="382" width="18" height="96" opacity="0.92"/>
+      <rect x="608" y="382" width="18" height="96" opacity="0.92"/>
+      <rect x="352" y="460" width="320" height="18" rx="9"/>
+    </g>
+    <!-- meander inductor -->
+    <path d="M 368 478 L 368 530 L 656 530 L 656 580 L 368 580 L 368 630 L 656 630 L 656 680 L 368 680 L 368 728 L 656 728"
+          fill="none" stroke="#f2b437" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- glass sheen -->
+  <path d="M 376.4 855 A 380 380 0 1 1 647.6 855 Z" fill="url(#sheen)"/>
+</svg>

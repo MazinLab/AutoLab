@@ -1,0 +1,20 @@
+/* Mirror of labcore/accession.py PREFIXES — display only, never parsed. */
+export const ACCESSION_PREFIXES: Record<string, string> = {
+  project: "PROJ",
+  person: "PER",
+  agent: "AGT",
+  instrument: "INST",
+  design: "DSN",
+  fab_recipe: "RCP",
+  fab_step: "STEP",
+  substrate_batch: "SUB",
+  wafer: "W",
+  device: "DEV",
+  experiment_setup: "ES",
+  measurement_run: "MR",
+  analysis_run: "AR",
+  software: "SW",
+  artifact: "ART",
+  note: "NOTE",
+  review_task: "RT",
+};

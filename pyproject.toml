@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "autolab"
+version = "0.1.0"
+description = "Mazin Lab catalog, ELN, and provenance system"
+requires-python = ">=3.13"
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+dependencies = [
+    "sqlmodel>=0.0.22",
+    "fastapi>=0.115",
+    "fastmcp>=3.4,<4",
+    "uvicorn[standard]>=0.30",
+    "uuid-utils>=0.9",
+    "alembic>=1.14",
+    "psycopg[binary]>=3.2",
+    "pydantic-settings>=2.4",
+    "segno>=1.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx>=0.27"]
+labdata = ["httpx>=0.27", "h5py>=3.11", "pyarrow>=17", "numpy>=1.26"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["labcore", "app", "labdata"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

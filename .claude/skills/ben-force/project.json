@@ -1,0 +1,10 @@
+{
+  "name": "AutoLab",
+  "language": "python",
+  "packageName": "",
+  "packageDir": "labcore",
+  "interpreter": "conda run -n py313 python",
+  "testCommand": "conda run -n py313 pytest",
+  "sourceExt": ".py",
+  "description": "Mazin Lab catalog, ELN, and provenance system: FastAPI + SQLModel over Postgres/SQLite with accession codes, provenance edges, and an event log"
+}

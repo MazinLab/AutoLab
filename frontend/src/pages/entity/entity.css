@@ -1,0 +1,790 @@
+.entity-page {
+  max-width: 1160px;
+}
+
+/* Setup pages carry the designer, whose drawing benefits from every
+   pixel the window offers. */
+.entity-page--wide {
+  max-width: none;
+}
+
+.entity-header {
+  padding-bottom: 32px;
+  border-bottom: 1px solid #d6d2c6;
+}
+
+.entity-header-controls {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.entity-identity {
+  display: flex;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.entity-identity span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #255149;
+  background: #e2ede8;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.entity-identity span:first-child {
+  color: #8c481f;
+  background: #f5e3c7;
+}
+
+.entity-derived-label {
+  margin: -5px 0 18px;
+  color: #64726d;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+
+/* The print control sits in the header action row as plain siblings of
+   Edit / Clone / Supersede, so the whole set is one row of equal height
+   controls; the status message drops to its own full width line. */
+.print-label-control,
+.print-label-fields {
+  display: contents;
+}
+
+.print-label-fields label {
+  display: inline-flex;
+}
+
+.print-label-fields select {
+  min-height: 50px;
+  padding: 0 34px 0 11px;
+  border: 1px solid #b8b9af;
+  border-radius: 10px;
+  color: #29443e;
+  background: #fff;
+}
+
+.print-label-control .form-message {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+.print-label-hint {
+  margin: 0;
+  color: #8a938d;
+  font-size: 0.78rem;
+}
+
+.entity-section {
+  min-width: 0;
+  margin-top: 42px;
+  padding: 22px;
+  border: 1px solid #ded8ca;
+  border-radius: 18px;
+  background: #fffdf8;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.section-heading .eyebrow,
+.entity-section > .eyebrow {
+  margin-bottom: 7px;
+}
+
+.section-heading > span {
+  color: #7a847f;
+  font-size: 0.75rem;
+}
+
+.entity-activity-status {
+  margin: 18px 0 -20px;
+  color: #66706a;
+  font-size: 0.84rem;
+}
+
+.entity-activity-status--error {
+  color: #a63d2f;
+}
+
+.related-list {
+  display: grid;
+  margin-top: 17px;
+  gap: 12px;
+}
+
+/* Fab flow: the wafer's process history as a numbered run sheet. */
+.fab-flow {
+  display: grid;
+  margin: 17px 0 0;
+  padding: 0;
+  gap: 10px;
+  list-style: none;
+  counter-reset: none;
+}
+
+.fab-flow li {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: start;
+  gap: 14px;
+  padding: 13px 15px;
+  border: 1px solid #e2ddd2;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.fab-flow-index {
+  display: grid;
+  min-width: 40px;
+  min-height: 40px;
+  place-items: center;
+  border-radius: 999px;
+  color: #17685b;
+  background: #e1eee8;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.fab-flow-detail {
+  min-width: 0;
+}
+
+.fab-flow-title {
+  color: #173b35;
+  font-size: 1rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.fab-flow-title:hover {
+  text-decoration: underline;
+}
+
+.fab-flow-meta {
+  margin: 3px 0 0;
+  color: #66706a;
+  font-size: 0.84rem;
+}
+
+.fab-flow-note {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 7px 0 0;
+  color: #475b55;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.fab-flow-refs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: 8px 0 0;
+  font-size: 0.76rem;
+}
+
+.fab-flow-refs a {
+  color: #0e6254;
+  font-weight: 750;
+}
+
+.fab-flow-accession {
+  color: #8a938d;
+  font-variant-numeric: tabular-nums;
+}
+
+.artifact-card,
+.note-card {
+  margin: 0;
+  padding: 14px;
+  border: 1px solid #e2ddd2;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.artifact-card {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+
+.artifact-preview,
+.artifact-preview img,
+.artifact-file-type {
+  display: block;
+  width: 76px;
+  height: 62px;
+  border-radius: 8px;
+}
+
+.artifact-preview img {
+  object-fit: cover;
+}
+
+.artifact-file-type {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #8c481f;
+  background: #f5e3c7;
+  font-size: 0.67rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.artifact-card h3,
+.note-card h3 {
+  margin: 0;
+  color: #173b35;
+  font-size: 0.95rem;
+}
+
+.artifact-card p,
+.note-card p {
+  margin: 5px 0;
+  color: #66706a;
+  font-size: 0.8rem;
+}
+
+.artifact-card a {
+  color: #0e6254;
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.note-body {
+  white-space: pre-wrap;
+}
+
+.event-feed {
+  display: grid;
+  margin: 18px 0 0;
+  padding: 0;
+  gap: 1px;
+  list-style: none;
+}
+
+.event-feed li {
+  padding: 13px 0;
+  border-bottom: 1px solid #e7e3da;
+}
+
+.event-feed li > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.event-feed strong {
+  color: #294c44;
+  text-transform: capitalize;
+}
+
+.event-feed time {
+  color: #7a847f;
+  font-size: 0.76rem;
+}
+
+.event-feed code {
+  display: block;
+  overflow-wrap: anywhere;
+  margin-top: 5px;
+  color: #596963;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 540px) {
+  .entity-section {
+    padding: 17px;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .artifact-card {
+    grid-template-columns: 62px minmax(0, 1fr);
+  }
+
+  .artifact-preview,
+  .artifact-preview img,
+  .artifact-file-type {
+    width: 62px;
+    height: 54px;
+  }
+}
+
+/* Inline image viewer: plots render full size, no download needed. */
+.artifact-figure {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #e2ddd2;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.artifact-figure-zoom {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  cursor: zoom-in;
+}
+
+.artifact-figure-zoom img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.artifact-figure-caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px 12px;
+  border-top: 1px solid #efece4;
+}
+
+.artifact-figure-caption h3 {
+  margin: 0;
+  color: #173b35;
+  font-size: 0.95rem;
+}
+
+.artifact-figure-caption p {
+  margin: 3px 0 0;
+  color: #66706a;
+  font-size: 0.8rem;
+}
+
+.artifact-figure-caption a {
+  color: #0e6254;
+  font-size: 0.8rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: rgb(14 22 20 / 88%);
+  cursor: zoom-out;
+}
+
+.image-lightbox img {
+  max-width: min(1500px, 96vw);
+  max-height: 86vh;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.image-lightbox-caption {
+  margin: 0;
+  color: #f2efe6;
+  font-size: 0.9rem;
+}
+
+.image-lightbox-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 14%);
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.entity-note-body {
+  max-width: 72ch;
+  padding: 4px 0;
+  font-size: 1.02rem;
+}
+
+.linked-records {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 14px 0 0;
+  padding: 0;
+  gap: 10px;
+  list-style: none;
+}
+
+.linked-records a {
+  display: flex;
+  min-height: 52px;
+  padding: 8px 14px;
+  flex-direction: column;
+  border: 1px solid #d8d3c7;
+  border-radius: 12px;
+  background: #fffdf8;
+  color: #29443e;
+  text-decoration: none;
+}
+
+.linked-records a:hover {
+  border-color: #8fa9a1;
+  background: #edf3ed;
+}
+
+.linked-records strong {
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+}
+
+.linked-records span {
+  color: #4c6058;
+  font-size: 0.92rem;
+}
+
+.linked-records small {
+  color: #7a817c;
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.entity-header-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Beside the title on wide screens the row hugs the right edge; when it
+   wraps under the accession on a phone it reads left to right. */
+@media (min-width: 800px) {
+  .entity-header-actions {
+    justify-content: flex-end;
+  }
+}
+
+/* Clone / Supersede: quiet links beside Edit, not competing with it. */
+.entity-action-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 0 12px;
+  border: 1px solid #d8d3c7;
+  border-radius: 11px;
+  color: #29443e;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.entity-action-link:hover {
+  border-color: #8fa9a1;
+  background: #edf3ed;
+}
+
+.entity-editor-hint {
+  margin: 6px 0 0;
+  color: #66706a;
+  font-size: 0.88rem;
+}
+
+.entity-editor-fields {
+  margin-top: 18px;
+}
+
+.entity-editor-extra {
+  display: grid;
+  gap: 12px;
+}
+
+.entity-editor-add-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 10px;
+}
+
+.entity-editor-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.entity-details {
+  display: grid;
+  margin: 14px 0 0;
+  gap: 10px 24px;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+
+.entity-details div {
+  padding: 10px 14px;
+  border: 1px solid #e2ded4;
+  border-radius: 10px;
+  background: #fffdf8;
+}
+
+.entity-details dt {
+  color: #7a817c;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.entity-details dd {
+  margin: 4px 0 0;
+  color: #173b35;
+  font-size: 0.98rem;
+  overflow-wrap: anywhere;
+}
+
+.scan-toggle {
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+
+/* ---- Attach, link, and correction controls ------------------------------ */
+
+.attach-form,
+.add-link-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+  gap: 8px;
+}
+
+/* Two capture affordances: phone camera and the file picker. The inputs are
+   hidden by the shared .attachment-browse rule; the labels are the buttons. */
+.attach-sources {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.attach-source {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid #d8d3c7;
+  border-radius: 10px;
+  background: #fffdf8;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.attach-source:hover {
+  border-color: #8fa9a1;
+  background: #edf3ed;
+}
+
+.attach-selected {
+  overflow-wrap: anywhere;
+  color: #66706a;
+  font-size: 0.78rem;
+}
+
+/* Selected (and upload-failed) files: full-width rows under the controls so
+   each file can carry its own error text and Remove control. */
+.attach-file-list {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attach-file-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.attach-file-list .attachment-name {
+  overflow-wrap: anywhere;
+}
+
+.attachment-error {
+  overflow-wrap: anywhere;
+  color: #a2543f;
+  font-size: 0.78rem;
+}
+
+.attach-form select,
+.add-link-form select,
+.add-link-form input {
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid #d8d3c7;
+  border-radius: 10px;
+  background: #fffdf8;
+  font-size: 0.9rem;
+}
+
+.add-link-form input {
+  flex: 1;
+  min-width: 170px;
+}
+
+.attach-form button[type="submit"],
+.add-link-form button[type="submit"] {
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid #29443e;
+  border-radius: 10px;
+  color: #fffdf8;
+  background: #29443e;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.attach-form button[type="submit"]:disabled,
+.add-link-form button[type="submit"]:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.linked-records li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.linked-record-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.related-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.unlink-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #66706a;
+}
+
+.unlink-relation {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+.unlink-button {
+  padding: 2px 10px;
+  border: 1px solid #c9c7bc;
+  border-radius: 8px;
+  color: #66706a;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.unlink-button:hover {
+  border-color: #a2543f;
+  color: #a2543f;
+}
+
+.confirm-armed {
+  border-color: #a2543f !important;
+  color: #fffdf8 !important;
+  background: #a2543f !important;
+}
+
+.danger-zone {
+  border-top: 1px solid #e3ded2;
+  padding-top: 18px;
+}
+
+.danger-zone-hint {
+  max-width: 62ch;
+  color: #66706a;
+  font-size: 0.9rem;
+}
+
+.danger-button {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid #a2543f;
+  border-radius: 10px;
+  color: #a2543f;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.entity-project-link {
+  margin: 8px 0 0;
+  color: #4d514c;
+  font-size: 0.92rem;
+}
+
+.analysis-results-table {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.analysis-results-table th,
+.analysis-results-table td {
+  padding: 4px 12px 4px 0;
+  border-bottom: 1px solid #e7e3da;
+  text-align: left;
+}
+
+.analysis-results-table td.results-cell--number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.analysis-results-actions {
+  display: flex;
+  margin-top: 8px;
+  gap: 8px;
+}
+
+.analysis-summaries-heading {
+  margin: 16px 0 6px;
+  font-size: 0.95rem;
+}

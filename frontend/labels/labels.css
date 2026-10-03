@@ -1,0 +1,512 @@
+/* Label station. Sits on the blueprint tokens (imported before this file);
+   everything here is page structure. Class prefix ls- keeps it clear of the
+   AutoLab component rules that ride along in blueprint.css. */
+
+.ls {
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--al-sans);
+  color: var(--al-fg);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* ---- Header ------------------------------------------------------------ */
+
+.ls-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 1rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--al-line-strong);
+  background: rgb(249 251 252 / 94%);
+  backdrop-filter: blur(6px);
+}
+
+.ls-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.ls-brand-mark {
+  align-self: center;
+  width: 14px;
+  height: 14px;
+  background: var(--al-fg);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0, 30% 30%, 30% 70%, 70% 70%, 70% 30%, 30% 30%);
+}
+
+.ls-brand-name {
+  white-space: nowrap;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.ls-kicker {
+  color: var(--al-fg-faint);
+  font-family: var(--al-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ls-kicker[data-tone="ok"] {
+  color: var(--al-ok);
+}
+
+.ls-kicker[data-tone="err"] {
+  color: var(--al-err);
+}
+
+/* ---- Layout ------------------------------------------------------------ */
+
+.ls-main {
+  display: grid;
+  grid-template-columns: minmax(300px, 440px) minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.ls-panel {
+  border: 1px solid var(--al-line-strong);
+  background: var(--al-surface);
+}
+
+@media (max-width: 800px) {
+  .ls-main {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .ls-preview-panel {
+    order: -1;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+}
+
+/* ---- Tabs -------------------------------------------------------------- */
+
+.ls-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--al-line-strong);
+}
+
+.ls-tabs button {
+  padding: 0.8rem 1rem;
+  border: 0;
+  border-right: 1px solid var(--al-line);
+  background: var(--al-surface-2);
+  color: var(--al-fg-muted);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ls-tabs button:last-child {
+  border-right: 0;
+}
+
+.ls-tabs button[aria-selected="true"] {
+  background: var(--al-surface);
+  color: var(--al-accent);
+  box-shadow: inset 0 -2px 0 var(--al-accent) !important;
+}
+
+/* ---- Form -------------------------------------------------------------- */
+
+#label-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+fieldset[hidden] {
+  display: none;
+}
+
+.ls-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ls-field-name {
+  color: var(--al-fg-muted);
+  font-family: var(--al-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ls-field-name small {
+  margin-left: 0.5rem;
+  color: var(--al-fg-faint);
+  font-size: inherit;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.ls-field input,
+.ls-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--al-line-strong);
+  background: #fff;
+  color: var(--al-fg);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.ls-field input.mono {
+  font-family: var(--al-mono);
+  font-size: 0.95rem;
+}
+
+.ls-field textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.ls-field input:focus,
+.ls-field textarea:focus {
+  border-color: var(--al-accent);
+  outline: none;
+}
+
+.ls-field input::placeholder,
+.ls-field textarea::placeholder {
+  color: var(--al-fg-faint);
+}
+
+.ls-problems {
+  margin: 0;
+  padding: 0.6rem 0.8rem 0.6rem 1.6rem;
+  border: 1px solid var(--al-warn);
+  background: var(--al-warn-bg);
+  color: var(--al-warn);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* ---- Logo toggle ------------------------------------------------------- */
+
+.ls-logo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+}
+
+.ls-field--inline[hidden] {
+  display: none;
+}
+
+.ls-field--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ls-field select {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--al-line-strong);
+  background: #fff;
+  color: var(--al-fg);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.ls-field select:focus {
+  border-color: var(--al-accent);
+  outline: none;
+}
+
+.ls-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.ls-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.ls-toggle-box {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--al-line-strong);
+  background: #fff;
+  position: relative;
+}
+
+.ls-toggle input:checked + .ls-toggle-box {
+  border-color: var(--al-accent);
+  background: var(--al-accent);
+}
+
+.ls-toggle input:checked + .ls-toggle-box::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--al-accent-fg);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.ls-toggle input:focus-visible + .ls-toggle-box {
+  outline: 2px solid var(--al-accent);
+  outline-offset: 2px;
+}
+
+.ls-toggle small {
+  margin-left: 0.4rem;
+  color: var(--al-fg-faint);
+  font-family: var(--al-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+}
+
+/* ---- Actions ----------------------------------------------------------- */
+
+.ls-actions {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--al-line);
+}
+
+.ls-copies {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ls-stepper {
+  display: inline-flex;
+  border: 1px solid var(--al-line-strong);
+  background: #fff;
+}
+
+.ls-stepper button {
+  width: 2.2rem;
+  border: 0;
+  background: var(--al-surface-2);
+  color: var(--al-fg);
+  font: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.ls-stepper button:hover {
+  background: var(--al-accent-soft);
+  color: var(--al-accent);
+}
+
+.ls-stepper input {
+  width: 3rem;
+  border: 0;
+  border-left: 1px solid var(--al-line);
+  border-right: 1px solid var(--al-line);
+  text-align: center;
+  font-family: var(--al-mono);
+  font-size: 1rem;
+  color: var(--al-fg);
+  background: #fff;
+  -moz-appearance: textfield;
+}
+
+.ls-stepper input::-webkit-inner-spin-button,
+.ls-stepper input::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.ls-print {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 1.2rem;
+  border: 1px solid var(--al-accent);
+  background: var(--al-accent);
+  color: var(--al-accent-fg);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ls-print:hover:not(:disabled) {
+  background: #005566;
+  border-color: #005566;
+}
+
+.ls-print:disabled {
+  border-color: var(--al-line-strong);
+  background: var(--al-surface-2);
+  color: var(--al-fg-faint);
+  cursor: not-allowed;
+}
+
+.ls-print kbd {
+  font-family: var(--al-mono);
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
+
+.ls-status {
+  min-height: 1.3em;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--al-fg-muted);
+}
+
+.ls-status[data-tone="ok"] {
+  color: var(--al-ok);
+}
+
+.ls-status[data-tone="err"] {
+  color: var(--al-err);
+}
+
+.ls-status[data-tone="busy"] {
+  color: var(--al-accent);
+}
+
+/* ---- Preview ----------------------------------------------------------- */
+
+.ls-preview-panel {
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.ls-preview-head {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--al-line);
+}
+
+/* The liner: the label sits on a strip of backing paper, framed like a
+   drawing view. Width tracks the column; the aspect ratio is the stock. */
+.ls-label {
+  position: relative;
+  box-sizing: border-box;
+  margin: 1.25rem auto 0;
+  padding: 16px;
+  max-width: 812px;
+  background: var(--al-surface-2);
+  background-image: linear-gradient(90deg, var(--al-line) 1px, transparent 1px);
+  background-size: 28px 100%;
+  border: 1px solid var(--al-line-strong);
+  transition: opacity 120ms;
+}
+
+.ls-label.is-rendering {
+  opacity: 0.7;
+}
+
+.ls-label:empty {
+  aspect-ratio: 406 / 254;
+}
+
+.ls-label svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--al-line-strong);
+  border-radius: 6px !important; /* the die-cut corners are round */
+}
+
+.label-preview text {
+  font-family: "Barlow Semi Condensed", "Arial Narrow", sans-serif;
+  font-weight: 700;
+  fill: #101820;
+}
+
+.label-preview rect:not(:first-child) {
+  fill: #101820;
+}
+
+.ls-dimension {
+  display: flex;
+  justify-content: center;
+  margin: 0.4rem auto 0;
+  max-width: 812px;
+  border-top: 1px solid var(--al-line-strong);
+  color: var(--al-fg-faint);
+  font-family: var(--al-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+}
+
+.ls-dimension span {
+  padding: 0.2rem 0.6rem;
+  background: var(--al-surface);
+  transform: translateY(-50%);
+}
+
+.ls-zpl {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--al-line);
+  padding-top: 0.75rem;
+}
+
+.ls-zpl summary {
+  cursor: pointer;
+  color: var(--al-fg-muted);
+  font-family: var(--al-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ls-zpl pre {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem;
+  overflow-x: auto;
+  background: var(--al-surface-2);
+  border: 1px solid var(--al-line);
+  color: var(--al-fg-muted);
+  font-family: var(--al-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}

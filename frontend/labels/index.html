@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-theme="blueprint">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#e9eef3" />
+    <meta name="robots" content="noindex" />
+    <title>Label Station</title>
+  </head>
+  <body class="ls">
+    <header class="ls-header">
+      <div class="ls-brand">
+        <span class="ls-brand-mark" aria-hidden="true"></span>
+        <span class="ls-brand-name">Mazin Lab</span>
+        <span class="ls-kicker">Label station</span>
+      </div>
+      <div class="ls-kicker" id="printer" role="status">Checking printer…</div>
+    </header>
+
+    <main class="ls-main">
+      <section class="ls-panel ls-form-panel" aria-labelledby="form-heading">
+        <div class="ls-tabs" role="tablist" aria-label="Label template">
+          <button type="button" role="tab" data-template="computer" aria-selected="true">
+            Computer ID
+          </button>
+          <button type="button" role="tab" data-template="general" aria-selected="false">
+            General
+          </button>
+        </div>
+
+        <form id="label-form" autocomplete="off" novalidate>
+          <h1 id="form-heading" class="visually-hidden">Label fields</h1>
+
+          <fieldset data-for="computer">
+            <label class="ls-field">
+              <span class="ls-field-name">Hostname</span>
+              <input name="hostname" spellcheck="false" placeholder="mec" autofocus />
+            </label>
+            <label class="ls-field">
+              <span class="ls-field-name">MAC address</span>
+              <input name="mac" class="mono" spellcheck="false" placeholder="aa:bb:cc:dd:ee:ff" />
+            </label>
+            <label class="ls-field">
+              <span class="ls-field-name">IP address</span>
+              <input name="ip" class="mono" spellcheck="false" inputmode="decimal" placeholder="192.168.254.1" />
+            </label>
+          </fieldset>
+
+          <fieldset data-for="general" hidden>
+            <label class="ls-field">
+              <span class="ls-field-name">Title</span>
+              <input name="title" placeholder="Spare SMA cables" />
+            </label>
+            <label class="ls-field">
+              <span class="ls-field-name">Body</span>
+              <textarea name="body" rows="4" placeholder="Up to four lines. Line breaks are kept."></textarea>
+            </label>
+            <label class="ls-field">
+              <span class="ls-field-name">URL <small>optional · prints as a QR code</small></span>
+              <input name="url" class="mono" type="url" inputmode="url" spellcheck="false" placeholder="https://" />
+            </label>
+          </fieldset>
+
+          <ul id="problems" class="ls-problems" hidden></ul>
+
+          <div class="ls-logo-row">
+            <label class="ls-toggle">
+              <input name="logo" type="checkbox" />
+              <span class="ls-toggle-box" aria-hidden="true"></span>
+              <span>Mazin Lab logo</span>
+            </label>
+            <label class="ls-field ls-field--inline" id="logo-position" hidden>
+              <span class="ls-field-name">Position</span>
+              <select name="logo_position"></select>
+            </label>
+          </div>
+
+          <div class="ls-actions">
+            <div class="ls-copies">
+              <span class="ls-field-name">Copies</span>
+              <div class="ls-stepper">
+                <button type="button" data-step="-1" aria-label="Fewer copies">−</button>
+                <input name="copies" type="number" min="1" max="20" value="1" aria-label="Copies" />
+                <button type="button" data-step="1" aria-label="More copies">+</button>
+              </div>
+            </div>
+            <button type="submit" id="print" class="ls-print" disabled>
+              Print label
+              <kbd aria-hidden="true">⌘↵</kbd>
+            </button>
+          </div>
+          <p id="status" class="ls-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="ls-panel ls-preview-panel" aria-label="Label preview">
+        <div class="ls-preview-head">
+          <span class="ls-kicker">Preview</span>
+          <span class="ls-kicker">2.00 × 1.25 in · 203 dpi</span>
+        </div>
+        <figure class="ls-label" id="preview" aria-live="off"></figure>
+        <div class="ls-dimension" aria-hidden="true"><span>406 dots</span></div>
+        <details class="ls-zpl">
+          <summary>ZPL sent to the printer</summary>
+          <pre id="zpl"></pre>
+        </details>
+      </section>
+    </main>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

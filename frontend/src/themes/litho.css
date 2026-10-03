@@ -1,0 +1,109 @@
+/* AutoLab — Litho "red phosphor" theme for the lithography bay.
+   Photoresist is exposed by blue/UV light, so this theme emits red ONLY:
+   every UI color is pure #RR0000, and a full-screen #f00 multiply overlay
+   (body::after, painted above everything) mathematically zeroes the green
+   and blue channels of ALL composited content — including uploaded images,
+   attachment previews, and the lightbox. On OLED panels the G/B subpixels
+   are fully off. Styling goes for an 80s vector arcade look: square
+   corners, mono display caps, phosphor glow, CRT scanlines + vignette.
+
+   Layout rules are shared with the dark theme: lcars.css is scoped
+   :is([data-theme="lcars"], [data-theme="litho"]), so this file only
+   overrides tokens and adds the red-safety + arcade layers. It must be
+   imported AFTER lcars.css (equal specificity, later wins). */
+
+:root[data-theme="litho"] {
+  /* structure */
+  --bg: #000;
+  --bg-2: #070000;
+  --panel: #0f0000;
+  --panel-2: #130000;
+  --field: #190000;
+
+  /* text — R channel encodes hierarchy; G and B stay zero. Pure red tops
+     out at 5.25:1 on black, so body text sits near the ceiling and only
+     decorative chrome drops below AA. */
+  --ink: #fa0000;
+  --ink-soft: #e60000;
+  --ink-dim: #b00000;
+  --heading: #f00;
+
+  /* palette collapsed to red brightness levels */
+  --orange: #f00;
+  --gold: #e20000;
+  --salmon: #c00000;
+  --peach: #f60000;
+  --lilac: #8f0000;
+  --violet: #7a0000;
+  --blue: #8f0000;
+  --red: #f00;
+
+  /* lines + glows */
+  --line: #2a0000;
+  --line-lcars: rgb(255 0 0 / 30%);
+  --line-strong: rgb(255 0 0 / 60%);
+  --glow: 0 0 22px rgb(255 0 0 / 25%);
+  --glow-strong: 0 0 30px rgb(255 0 0 / 50%);
+
+  /* arcade cabinets don't do rounded corners */
+  --radius: 0;
+  --radius-elbow: 0;
+  --radius-pill: 0;
+
+  /* terminal caps for the displays, mono everywhere numbers live */
+  --display: "JetBrains Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  --segbar: linear-gradient(
+    90deg,
+    #f00 0 8%,
+    transparent 8% 10%,
+    #c00000 10% 32%,
+    transparent 32% 34%,
+    #900000 34% 64%,
+    transparent 64% 66%,
+    #5c0000 66% 100%
+  );
+}
+
+/* Red CRT scanlines + a soft vignette in one layer. */
+[data-theme="litho"] body::before {
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 55%,
+      rgb(0 0 0 / 45%) 100%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgb(255 0 0 / 3%) 0,
+      rgb(255 0 0 / 3%) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+
+/* THE SAFETY LAYER. multiply with pure red gives out_G = out_B = 0 for every
+   pixel beneath it, whatever the source — UI, photos, PDFs, video. Do not
+   weaken this to a tint or lower its z-index. */
+[data-theme="litho"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  background: #f00;
+  mix-blend-mode: multiply;
+}
+
+/* Phosphor glow on the big displays. */
+[data-theme="litho"] h1,
+[data-theme="litho"] h2 {
+  text-shadow: 0 0 14px rgb(255 0 0 / 55%);
+}
+
+[data-theme="litho"] ::selection {
+  color: #000;
+  background: #f00;
+}

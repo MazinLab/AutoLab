@@ -1,0 +1,1 @@
+Experiment and other note pages no longer show a "Notes" list under the log. A note's body is its log; the Notebook list of attached notes stays on wafers, devices, instruments and other non-note records.

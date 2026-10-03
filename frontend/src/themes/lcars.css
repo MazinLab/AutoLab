@@ -1,0 +1,1963 @@
+/* AutoLab — LCARS "Starfleet science console" theme.
+   Okuda-era TNG bridge computer styling matched to the Mazin Lab main site and
+   HerriottCellCalc: true-black field, #ff9900 orange chrome, Antonio condensed
+   display caps, Barlow Semi Condensed body, JetBrains Mono for accessions and
+   numeric readouts, asymmetric elbow radii, segmented tri-colour bars, CRT
+   scanline overlay. Fonts are self-hosted via @fontsource (imported in
+   main.tsx) so the PWA stays offline-capable.
+   Every rule is scoped under :is([data-theme="lcars"], [data-theme="litho"])
+   so the Litho red theme (litho.css, imported after this file) inherits the
+   whole dark skin and only overrides tokens; the default cream theme is
+   untouched. New components need rules here or they render cream-styled. */
+
+:root:is([data-theme="lcars"], [data-theme="litho"]) {
+  /* structure */
+  --bg: #000;
+  --bg-2: #05060a;
+  --panel: #0a0c12;
+  --panel-2: #0d0f17;
+  --field: #111520;
+
+  /* text */
+  --ink: #e8ebf2;
+  --ink-soft: #8890a3;
+  --ink-dim: #4d5366;
+  --heading: #fff;
+
+  /* LCARS Okudagram palette */
+  --orange: #f90;
+  --gold: #fc6;
+  --salmon: #f96;
+  --peach: #fc9;
+  --lilac: #c9c;
+  --violet: #96c;
+  --blue: #99c;
+  --red: #c66;
+
+  /* lines + glows (no drop shadows — coloured glows only) */
+  --line: #1a1e2a;
+  --line-lcars: rgb(255 153 0 / 28%);
+  --line-strong: rgb(255 153 0 / 55%);
+  --glow: 0 0 22px rgb(255 153 0 / 20%);
+  --glow-strong: 0 0 26px rgb(255 153 0 / 42%);
+
+  --radius: 4px;
+  --radius-elbow: 4px 4px 18px 4px;
+  --radius-pill: 4px 26px 26px 4px;
+
+  --display: "Antonio", "Barlow Semi Condensed", Impact, system-ui, sans-serif;
+  --body: "Barlow Semi Condensed", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  /* reusable segmented bar (orange | gold | salmon | lilac) */
+  --segbar: linear-gradient(
+    90deg,
+    var(--orange) 0 8%,
+    transparent 8% 10%,
+    var(--gold) 10% 32%,
+    transparent 32% 34%,
+    var(--salmon) 34% 64%,
+    transparent 64% 66%,
+    var(--lilac) 66% 100%
+  );
+
+  color: var(--ink);
+  background: var(--bg);
+  font-family: var(--body);
+
+  /* Condensed faces read small — raise the whole rem scale a notch. */
+  font-size: 112.5%;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) html,
+:root:is([data-theme="lcars"], [data-theme="litho"]) {
+  background: var(--bg);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) body {
+  color: var(--ink);
+  background: var(--bg);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* CRT scanline overlay */
+:is([data-theme="lcars"], [data-theme="litho"]) body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgb(255 153 0 / 2%) 0,
+    rgb(255 153 0 / 2%) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.5;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) ::selection {
+  color: #000;
+  background: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) ::-webkit-scrollbar-track {
+  background: #000;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) ::-webkit-scrollbar-thumb {
+  border: 3px solid #000;
+  border-radius: 0;
+  background: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  ::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) button:focus-visible,
+:is([data-theme="lcars"], [data-theme="litho"]) input:focus-visible,
+:is([data-theme="lcars"], [data-theme="litho"]) select:focus-visible,
+:is([data-theme="lcars"], [data-theme="litho"]) textarea:focus-visible,
+:is([data-theme="lcars"], [data-theme="litho"]) a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@keyframes lcars-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* ---- Typography --------------------------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) h1 {
+  /* Antonio is condensed: sized so page titles stay on one line when the
+     viewport allows instead of wrapping inside the serif theme's measure. */
+  max-width: none;
+  color: var(--heading);
+  font-family: var(--display);
+  font-size: clamp(2.1rem, 4.5vw, 3.7rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .lede {
+  max-width: none;
+  font-size: clamp(1.02rem, 2vw, 1.18rem);
+}
+
+/* pulsing bridge-status indicator + segmented masthead bar */
+:is([data-theme="lcars"], [data-theme="litho"]) .page-panel > h1::before,
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-header h1::before {
+  content: "";
+  display: inline-block;
+  width: 0.4em;
+  height: 0.4em;
+  margin-right: 0.45em;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 8px var(--orange);
+  vertical-align: 0.12em;
+  animation: lcars-pulse 2.2s ease-in-out infinite;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .page-panel > h1::after {
+  content: "";
+  display: block;
+  height: 5px;
+  margin-top: 18px;
+  border-radius: 2px 10px 10px 2px;
+  background: var(--segbar);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) h2,
+:is([data-theme="lcars"], [data-theme="litho"]) .browser-page h2,
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-page h2,
+:is([data-theme="lcars"], [data-theme="litho"]) .form-heading h2,
+:is([data-theme="lcars"], [data-theme="litho"]) .review-card h2,
+:is([data-theme="lcars"], [data-theme="litho"]) .empty-state h2,
+:is([data-theme="lcars"], [data-theme="litho"]) .template-group h2,
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-page h2,
+:is([data-theme="lcars"], [data-theme="litho"]) .recent-scans h2 {
+  color: var(--gold);
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .eyebrow::before {
+  content: "";
+  flex: none;
+  width: 1.6em;
+  height: 0.6em;
+  border-radius: 2px 8px 8px 2px;
+  background: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .lede,
+:is([data-theme="lcars"], [data-theme="litho"]) .field-hint,
+:is([data-theme="lcars"], [data-theme="litho"]) .loading-message,
+:is([data-theme="lcars"], [data-theme="litho"]) .empty-state,
+:is([data-theme="lcars"], [data-theme="litho"]) .empty-state p,
+:is([data-theme="lcars"], [data-theme="litho"]) .notice,
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-editor-hint,
+:is([data-theme="lcars"], [data-theme="litho"]) .mention-results > p,
+:is([data-theme="lcars"], [data-theme="litho"]) .actor-picker-note,
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-activity-status,
+:is([data-theme="lcars"], [data-theme="litho"]) .scanner-status,
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-shortcut,
+:is([data-theme="lcars"], [data-theme="litho"]) .recent-scans p,
+:is([data-theme="lcars"], [data-theme="litho"]) .recent-scans ul {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .field-error,
+:is([data-theme="lcars"], [data-theme="litho"]) .notice--error,
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-activity-status--error,
+:is([data-theme="lcars"], [data-theme="litho"]) .scanner-detail {
+  color: var(--red);
+}
+
+/* ---- Shell: mobile header + LCARS sidebar rail -------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .mobile-header {
+  border-bottom: 1px solid var(--line-lcars);
+  background: rgb(0 0 0 / 88%);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .brand {
+  color: var(--heading);
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .brand-mark {
+  border-radius: 4px 12px 12px 4px;
+  color: #000;
+  background: var(--orange);
+  font-family: var(--display);
+  font-weight: 700;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .environment-label {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .sidebar {
+  border-top: 1px solid var(--line-lcars);
+  background: #000;
+  box-shadow: none;
+}
+
+/* Bottom bar on mobile; the full rail appears at the desktop breakpoint. */
+:is([data-theme="lcars"], [data-theme="litho"]) .navigation-link {
+  color: var(--ink-soft);
+  font-family: var(--display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .navigation-link--active {
+  color: #000;
+  background: var(--orange);
+  border-radius: 4px 16px 16px 4px;
+}
+
+@media (min-width: 800px) {
+  :is([data-theme="lcars"], [data-theme="litho"]) .sidebar {
+    border-right: 1px solid var(--line-lcars);
+    background: #000;
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"]) .sidebar > .brand {
+    color: var(--heading);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"]) .sidebar .brand-mark {
+    color: #000;
+    background: var(--orange);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"]) .sidebar-kicker {
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* The iconic rail: each nav block is a coloured elbow pill. Inactive
+     blocks are dark consoles with a coloured edge; the active block lights
+     up solid with black text. */
+  :is([data-theme="lcars"], [data-theme="litho"]) .navigation-link {
+    position: relative;
+    border-radius: 4px 22px 22px 4px;
+    border-left: 6px solid var(--rail, var(--orange));
+    color: var(--rail, var(--orange));
+    background: var(--panel);
+    font-family: var(--display);
+    font-size: 0.86rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"])
+    .navigation-link:nth-child(1) {
+    --rail: var(--orange);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"])
+    .navigation-link:nth-child(2) {
+    --rail: var(--gold);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"])
+    .navigation-link:nth-child(3) {
+    --rail: var(--salmon);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"])
+    .navigation-link:nth-child(4) {
+    --rail: var(--lilac);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"])
+    .navigation-link:nth-child(5) {
+    --rail: var(--blue);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"])
+    .navigation-link:nth-child(6) {
+    --rail: var(--peach);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"]) .navigation-link:hover {
+    color: #000;
+    background: var(--rail, var(--orange));
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"]) .navigation-link--active,
+  :is([data-theme="lcars"], [data-theme="litho"])
+    .navigation-link--active:hover {
+    color: #000;
+    background: var(--rail, var(--orange));
+    box-shadow: 0 0 18px rgb(255 153 0 / 25%);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"]) .sidebar-status {
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"]) .status-dot {
+    background: var(--orange);
+    box-shadow: 0 0 8px var(--orange);
+    animation: lcars-pulse 2.2s ease-in-out infinite;
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"])
+    .sidebar-status--read-only
+    .status-dot {
+    background: var(--gold);
+    box-shadow: 0 0 8px var(--gold);
+  }
+
+  :is([data-theme="lcars"], [data-theme="litho"])
+    .sidebar-status--offline
+    .status-dot {
+    background: var(--red);
+    box-shadow: 0 0 8px var(--red);
+  }
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .theme-toggle {
+  border: 1.5px solid var(--orange);
+  border-radius: var(--radius-pill);
+  color: #000;
+  background: var(--orange);
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .theme-toggle:hover {
+  border-color: var(--gold);
+  color: #000;
+  background: var(--gold);
+  box-shadow: var(--glow);
+}
+
+/* ---- Console panels ------------------------------------------------------ */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .accession-form,
+:is([data-theme="lcars"], [data-theme="litho"]) .placeholder-card,
+:is([data-theme="lcars"], [data-theme="litho"]) .template-form,
+:is([data-theme="lcars"], [data-theme="litho"]) .quick-note-form,
+:is([data-theme="lcars"], [data-theme="litho"]) .review-card,
+:is([data-theme="lcars"], [data-theme="litho"]) .empty-state,
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-section,
+:is([data-theme="lcars"], [data-theme="litho"]) .browser-tool,
+:is([data-theme="lcars"], [data-theme="litho"]) .success-card,
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-error,
+:is([data-theme="lcars"], [data-theme="litho"]) .catalog-table-wrap {
+  border: 1.5px solid var(--line-lcars);
+  border-left: 6px solid var(--orange);
+  border-radius: var(--radius-elbow);
+  background: var(--panel);
+  box-shadow: none;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .browser-tool {
+  border-left-color: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .success-card {
+  border-left-color: var(--gold);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .success-card p {
+  color: var(--gold);
+  font-family: var(--display);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-error {
+  border-left-color: var(--red);
+  color: var(--red);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .form-heading {
+  border-bottom: 1px solid var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .placeholder-card span {
+  background: var(--panel-2);
+}
+
+/* ---- Labels + form fields ------------------------------------------------ */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .accession-form label,
+:is([data-theme="lcars"], [data-theme="litho"]) .template-field label,
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-label,
+:is([data-theme="lcars"], [data-theme="litho"]) .create-cooldown label,
+:is([data-theme="lcars"], [data-theme="litho"]) .browser-tool > label,
+:is([data-theme="lcars"], [data-theme="litho"]) .browser-tool label,
+:is([data-theme="lcars"], [data-theme="litho"]) .table-filter,
+:is([data-theme="lcars"], [data-theme="litho"]) .print-label-fields label,
+:is([data-theme="lcars"], [data-theme="litho"]) .actor-picker label {
+  color: var(--gold);
+  font-family: var(--display);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) input,
+:is([data-theme="lcars"], [data-theme="litho"]) select,
+:is([data-theme="lcars"], [data-theme="litho"]) textarea {
+  border-color: var(--line);
+  color: var(--ink);
+  background: var(--field);
+  font-family: var(--mono);
+  font-size: 0.92rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) input::placeholder,
+:is([data-theme="lcars"], [data-theme="litho"]) textarea::placeholder {
+  color: var(--ink-dim);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) input:focus,
+:is([data-theme="lcars"], [data-theme="litho"]) select:focus,
+:is([data-theme="lcars"], [data-theme="litho"]) textarea:focus {
+  border-color: var(--orange);
+  box-shadow:
+    0 0 0 1px var(--orange),
+    var(--glow);
+  outline: none;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) select {
+  appearance: none;
+  cursor: pointer;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--orange) 50%),
+    linear-gradient(135deg, var(--orange) 50%, transparent 50%);
+  background-position:
+    right 0.95rem center,
+    right 0.7rem center;
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) input[type="number"] {
+  font-variant-numeric: tabular-nums;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) input[type="checkbox"] {
+  accent-color: var(--orange);
+}
+
+/* ---- Buttons ------------------------------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .field-row button,
+:is([data-theme="lcars"], [data-theme="litho"]) .compact-field-row button,
+:is([data-theme="lcars"], [data-theme="litho"]) .primary-button,
+:is([data-theme="lcars"], [data-theme="litho"]) .create-cooldown button,
+:is([data-theme="lcars"], [data-theme="litho"]) .retry-action,
+:is([data-theme="lcars"], [data-theme="litho"]) .secondary-action,
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-step--active span {
+  border: 0;
+  color: #000;
+  background: var(--orange);
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .field-row button,
+:is([data-theme="lcars"], [data-theme="litho"]) .compact-field-row button,
+:is([data-theme="lcars"], [data-theme="litho"]) .primary-button,
+:is([data-theme="lcars"], [data-theme="litho"]) .create-cooldown button,
+:is([data-theme="lcars"], [data-theme="litho"]) .retry-action,
+:is([data-theme="lcars"], [data-theme="litho"]) .secondary-action {
+  border-radius: var(--radius-pill);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .field-row button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .compact-field-row button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .primary-button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .create-cooldown button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .retry-action:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .secondary-action:hover {
+  background: var(--gold);
+  box-shadow: var(--glow-strong);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .secondary-button,
+:is([data-theme="lcars"], [data-theme="litho"]) .quick-actions button,
+:is([data-theme="lcars"], [data-theme="litho"]) .link-login-button {
+  border: 1.5px solid var(--gold);
+  border-radius: var(--radius-pill);
+  color: var(--gold);
+  background: transparent;
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .secondary-button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .quick-actions button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .link-login-button:hover {
+  border-color: var(--gold);
+  color: #000;
+  background: var(--gold);
+  box-shadow: var(--glow);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .quick-actions button span {
+  color: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .text-button,
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-browse,
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-camera,
+:is([data-theme="lcars"], [data-theme="litho"]) .scan-toggle {
+  color: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .text-button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-browse:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-camera:hover {
+  color: var(--orange);
+}
+
+/* ---- Template chooser + themed groups ------------------------------------ */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-choice {
+  border: 1.5px solid var(--line);
+  border-left: 6px solid var(--group, var(--orange));
+  border-radius: 4px 18px 18px 4px;
+  color: var(--ink);
+  background: var(--panel);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-choice:hover {
+  border-color: var(--group, var(--orange));
+  background: var(--panel-2);
+  box-shadow: var(--glow);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-choice span {
+  font-family: var(--display);
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--group, var(--orange));
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-choice small {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  letter-spacing: 0.14em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .template-choice
+  .template-prefix {
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--group, var(--orange));
+  opacity: 0.75;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .template-choice:hover
+  .template-prefix {
+  border-color: var(--group, var(--orange));
+  opacity: 1;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-group {
+  border: 1.5px solid var(--line-lcars);
+  border-radius: var(--radius-elbow);
+  background: var(--panel);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-group--fab {
+  --group: var(--orange);
+
+  border-color: var(--line-lcars);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-group--testing {
+  --group: var(--lilac);
+
+  border-color: rgb(204 153 204 / 35%);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-group--other {
+  --group: var(--blue);
+
+  border-color: var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-group h2 {
+  position: relative;
+  padding-bottom: 10px;
+  color: var(--group, var(--orange));
+  font-size: 1.02rem;
+  letter-spacing: 0.18em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-group h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px 8px 8px 2px;
+  background: var(--segbar);
+}
+
+/* ---- Tables (catalog lists, markdown, params) ---------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .catalog-table th {
+  border-bottom: 2px solid var(--line-lcars);
+  color: var(--orange);
+  background: var(--panel-2);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .catalog-table td {
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 0.86rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .catalog-table
+  tbody
+  tr:nth-child(even) {
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .catalog-table
+  tbody
+  tr:hover
+  td {
+  background: rgb(255 153 0 / 7%);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .catalog-table
+  td:first-child
+  a {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .catalog-table .row-name {
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .catalog-table .row-name:hover {
+  color: var(--gold);
+}
+
+/* ---- Search results + autocomplete --------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .search-results,
+:is([data-theme="lcars"], [data-theme="litho"]) .autocomplete-results {
+  border: 1.5px solid var(--line-strong);
+  background: var(--panel);
+  box-shadow: var(--glow);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .search-results p {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .search-results a {
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .search-results a:hover,
+:is([data-theme="lcars"], [data-theme="litho"])
+  .autocomplete-results
+  button:hover {
+  background: rgb(255 153 0 / 8%);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .search-results small,
+:is([data-theme="lcars"], [data-theme="litho"])
+  .autocomplete-results
+  button
+  span {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .autocomplete-results button {
+  color: var(--ink);
+}
+
+/* ---- Chips, pills, linked records ---------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-identity span {
+  border: 1px solid var(--line-lcars);
+  border-radius: 3px 12px 12px 3px;
+  color: var(--gold);
+  background: var(--panel-2);
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .entity-identity
+  span:first-child {
+  border-color: var(--orange);
+  color: #000;
+  background: var(--orange);
+  font-weight: 700;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-derived-label {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-action {
+  border-radius: 3px 12px 12px 3px;
+  color: #000;
+  background: var(--gold);
+  font-family: var(--mono);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-action--updated {
+  background: var(--lilac);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-day {
+  color: var(--orange);
+  font-family: var(--mono);
+  letter-spacing: 0.2em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-row {
+  border-bottom: 1px solid var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-entity {
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-time,
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-accession {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-type,
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-actor {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .linked-records a {
+  border: 1.5px solid var(--line);
+  border-left: 5px solid var(--gold);
+  border-radius: 4px 14px 14px 4px;
+  color: var(--ink);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .linked-records a:hover {
+  border-color: var(--gold);
+  background: var(--panel);
+  box-shadow: var(--glow);
+}
+
+/* strong is the record's name (the accession moved into the small line). */
+:is([data-theme="lcars"], [data-theme="litho"]) .linked-records strong {
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .linked-records span {
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .linked-records small {
+  color: var(--gold);
+  font-family: var(--mono);
+  letter-spacing: 0.12em;
+}
+
+/* Fab flow: the wafer run sheet. */
+:is([data-theme="lcars"], [data-theme="litho"]) .fab-flow li {
+  border: 1.5px solid var(--line);
+  border-left: 5px solid var(--orange);
+  border-radius: 4px 14px 14px 4px;
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .fab-flow-index {
+  color: #000;
+  background: var(--orange);
+  font-family: var(--mono);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .fab-flow-title {
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .fab-flow-meta,
+:is([data-theme="lcars"], [data-theme="litho"]) .fab-flow-note {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .fab-flow-refs a {
+  color: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .fab-flow-accession {
+  color: var(--ink-dim);
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .recent-scans a {
+  border-radius: 3px 12px 12px 3px;
+  color: #000;
+  background: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+}
+
+/* ---- Entity page: details readout, cards, events -------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-header {
+  border-bottom: 0;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-header::after {
+  content: "";
+  display: block;
+  height: 5px;
+  margin-top: 26px;
+  border-radius: 2px 10px 10px 2px;
+  background: var(--segbar);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-details div {
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--orange);
+  border-radius: 3px 3px 10px 3px;
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-details dt {
+  color: var(--ink-soft);
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-details dd {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-card,
+:is([data-theme="lcars"], [data-theme="litho"]) .note-card,
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-figure {
+  border: 1.5px solid var(--line);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-card h3,
+:is([data-theme="lcars"], [data-theme="litho"]) .note-card h3,
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-figure-caption h3 {
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-card p,
+:is([data-theme="lcars"], [data-theme="litho"]) .note-card p,
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-figure-caption p {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-card a,
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-figure-caption a,
+:is([data-theme="lcars"], [data-theme="litho"]) .form-message a,
+:is([data-theme="lcars"], [data-theme="litho"]) .success-card a,
+:is([data-theme="lcars"], [data-theme="litho"]) .evidence-links a,
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-shortcut a {
+  color: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-file-type {
+  color: #000;
+  background: var(--salmon);
+  font-family: var(--mono);
+}
+
+/* Uploaded figures keep their white plot backgrounds — frame them like the
+   viewscreen instead of fighting them. */
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-figure {
+  border-color: var(--line-strong);
+  box-shadow: var(--glow);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .artifact-figure-caption {
+  border-top: 1px solid var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .event-feed li {
+  border-bottom: 1px solid var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .event-feed strong {
+  color: var(--gold);
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .event-feed time {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .event-feed code {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .section-heading > span {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+}
+
+/* ---- Messages ------------------------------------------------------------ */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .form-message--error {
+  border: 1px solid rgb(204 102 102 / 45%);
+  border-left: 4px solid var(--red);
+  color: var(--red);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .form-message--success {
+  border: 1px solid var(--line-lcars);
+  border-left: 4px solid var(--gold);
+  color: var(--gold);
+  background: var(--panel-2);
+}
+
+/* ---- Attachments ---------------------------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-dropzone {
+  border: 2px dashed var(--line-strong);
+  border-radius: var(--radius-elbow);
+  color: var(--ink-soft);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-dropzone--active {
+  border-color: var(--orange);
+  background: rgb(255 153 0 / 8%);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-list li {
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-size {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+/* ---- Markdown body + editor ----------------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body {
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body h1,
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body h2,
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body h3,
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body h4,
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body h5,
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body h6 {
+  color: var(--gold);
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body code {
+  color: var(--peach);
+  background: var(--field);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body pre {
+  border-left: 4px solid var(--orange);
+  color: var(--ink);
+  background: var(--bg-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body blockquote {
+  border-left: 3px solid var(--lilac);
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body hr {
+  border-top: 0;
+  height: 4px;
+  border-radius: 2px 8px 8px 2px;
+  background: var(--segbar);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body th,
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body td {
+  border: 1px solid var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body th {
+  color: var(--orange);
+  background: var(--panel-2);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-body a {
+  color: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-editor {
+  border: 1.5px solid var(--line);
+  background: var(--field);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-toolbar {
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-tool {
+  color: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .markdown-tool:hover:not(:disabled) {
+  color: #000;
+  background: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .markdown-tab {
+  color: var(--ink-soft);
+  font-family: var(--display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .markdown-tab[aria-pressed="true"] {
+  color: #000;
+  background: var(--orange);
+}
+
+/* ---- Lineage graph --------------------------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .lineage-edges line {
+  stroke: var(--ink-dim);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .lineage-edge-label {
+  fill: var(--ink-soft);
+  stroke: #0a0c12;
+  font-family: var(--mono);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .lineage-nodes rect {
+  fill: var(--panel-2);
+  stroke: var(--line-strong);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .lineage-nodes a:hover rect,
+:is([data-theme="lcars"], [data-theme="litho"]) .lineage-nodes a:focus rect {
+  fill: #191307;
+  stroke: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .lineage-nodes
+  .lineage-node--focus {
+  fill: var(--orange);
+  stroke: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .lineage-nodes
+  .lineage-node--focus
+  ~ .lineage-node-accession,
+:is([data-theme="lcars"], [data-theme="litho"])
+  .lineage-nodes
+  a
+  .lineage-node--focus
+  + .lineage-node-accession {
+  fill: #000;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .lineage-node-accession {
+  fill: var(--gold);
+  font-family: var(--mono);
+  font-weight: 500;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .lineage-node-type {
+  fill: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+
+/* Focus node text sits inside an orange block — flip it dark for contrast. */
+:is([data-theme="lcars"], [data-theme="litho"])
+  .lineage-nodes
+  g:has(.lineage-node--focus)
+  .lineage-node-accession,
+:is([data-theme="lcars"], [data-theme="litho"])
+  .lineage-nodes
+  g:has(.lineage-node--focus)
+  .lineage-node-type {
+  fill: #1c1305;
+}
+
+/* ---- Scanner + mount ------------------------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .scanner-viewport {
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-elbow);
+  background: var(--bg-2);
+  box-shadow: var(--glow);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .scanner-frame {
+  border: 3px solid var(--orange);
+  box-shadow: 0 0 0 999px rgb(0 0 0 / 45%);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-steps li {
+  color: var(--ink-dim);
+  font-family: var(--display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-steps span {
+  border: 1.5px solid var(--line);
+  color: var(--ink-soft);
+  font-family: var(--mono);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .mount-steps
+  .mount-step--active {
+  color: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-step--active span {
+  border-color: var(--orange);
+  color: #000;
+  background: var(--orange);
+  box-shadow: 0 0 10px rgb(255 153 0 / 45%);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-summary {
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 3px 3px 10px 3px;
+  color: var(--ink);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-summary span {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .cooldown-list button,
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-success a {
+  border: 1.5px solid var(--line);
+  border-left: 5px solid var(--gold);
+  border-radius: 4px 14px 14px 4px;
+  color: var(--ink);
+  background: var(--panel);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .cooldown-list button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-success a:hover {
+  border-color: var(--gold);
+  box-shadow: var(--glow);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .cooldown-list span,
+:is([data-theme="lcars"], [data-theme="litho"]) .mount-success span {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .create-cooldown {
+  border-top: 1px solid var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .recent-scans {
+  border-top: 1px solid var(--line);
+}
+
+/* ---- Lightbox --------------------------------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .image-lightbox {
+  background: rgb(0 0 0 / 92%);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .image-lightbox img {
+  border: 1.5px solid var(--line-strong);
+  box-shadow: var(--glow-strong);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .image-lightbox-caption {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .image-lightbox-close {
+  color: #000;
+  background: var(--orange);
+}
+
+/* ---- Actor picker ------------------------------------------------------------ */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .actor-picker-note--acting {
+  color: var(--salmon);
+}
+
+/* ---- Motion safety ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  :is([data-theme="lcars"], [data-theme="litho"]) *,
+  :is([data-theme="lcars"], [data-theme="litho"]) *::before,
+  :is([data-theme="lcars"], [data-theme="litho"]) *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---- Corrections + attach controls -------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .attach-form select,
+:is([data-theme="lcars"], [data-theme="litho"]) .add-link-form select,
+:is([data-theme="lcars"], [data-theme="litho"]) .add-link-form input {
+  border: 1px solid var(--line-lcars);
+  border-radius: var(--radius);
+  color: var(--ink);
+  background: var(--field);
+  font-family: var(--mono);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .attach-form
+  input[type="file"] {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"])
+  .attach-form
+  button[type="submit"],
+:is([data-theme="lcars"], [data-theme="litho"])
+  .add-link-form
+  button[type="submit"] {
+  border: 1.5px solid var(--orange);
+  border-radius: var(--radius-pill);
+  color: #000;
+  background: var(--orange);
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .unlink-control {
+  color: var(--ink-dim);
+  font-family: var(--mono);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .unlink-button {
+  border: 1px solid var(--line-lcars);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  background: transparent;
+  font-family: var(--display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .unlink-button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .confirm-armed {
+  border-color: var(--red) !important;
+  color: #000 !important;
+  background: var(--red) !important;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .danger-zone {
+  border-top: 1px solid var(--line-lcars);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .danger-zone-hint {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .danger-button {
+  border: 1.5px solid var(--red);
+  border-radius: var(--radius-pill);
+  color: var(--red);
+  background: transparent;
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-flush {
+  border: 1.5px solid var(--gold);
+  border-radius: var(--radius-pill);
+  color: #000;
+  background: var(--gold);
+  font-family: var(--display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-rejected {
+  color: var(--red);
+  font-family: var(--mono);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-dismiss {
+  border: 1px solid var(--line-lcars);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  background: transparent;
+}
+
+/* ---- Pagers, activity filters, print hint ------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .table-pager {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .table-pager__range {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-filter-group,
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-filter-actions {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-filter-actions {
+  border: 1px solid var(--line-lcars);
+  border-radius: var(--radius-elbow);
+  padding: 8px 12px;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .action-toggle {
+  border: 1px solid var(--line-lcars);
+  border-radius: var(--radius-pill);
+  color: var(--ink-soft);
+  background: transparent;
+  font-family: var(--display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .action-toggle--active {
+  border-color: var(--orange);
+  color: #000;
+  background: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-action--linked {
+  color: var(--lilac);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-action--unlinked,
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-action--deleted {
+  color: var(--red);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .activity-relation {
+  color: var(--ink-dim);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .print-label-hint {
+  color: var(--ink-dim);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+/* ---- Break-in round additions (2026-08-08) ------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .active-setup-chip {
+  border: 1.5px solid var(--line-lcars);
+  border-left: 6px solid var(--gold);
+  border-radius: var(--radius-elbow);
+  background: var(--panel);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .active-setup-chip:hover {
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .active-setup-name {
+  color: var(--gold);
+  font-family: var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .active-setup-meta {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .nav-badge {
+  background: var(--orange);
+  border-radius: 999px;
+  color: #000;
+  font-family: var(--display);
+  font-size: 0.75rem;
+  line-height: 1;
+  margin-left: auto;
+  padding: 3px 8px;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-action-link {
+  color: var(--lilac);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .entity-action-link:hover {
+  color: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .attach-source,
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-browse {
+  border: 1.5px solid var(--line-lcars);
+  border-radius: var(--radius-elbow);
+  background: var(--panel-2);
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .attach-source:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-browse:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .attach-selected,
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-batch-note,
+:is([data-theme="lcars"], [data-theme="litho"]) .batch-accessions {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .supersede-banner {
+  border: 1.5px solid var(--line-lcars);
+  border-left: 6px solid var(--red);
+  border-radius: var(--radius-elbow);
+  background: var(--panel-2);
+  color: var(--red);
+  padding: 8px 12px;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .copies-field label {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---- Review patch round (2026-08-08) ------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-dead {
+  border: 1.5px solid var(--line-lcars);
+  border-left: 6px solid var(--red);
+  border-radius: var(--radius-elbow);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-dead-summary {
+  color: var(--red);
+  font-family: var(--display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-dead-name {
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-dead-detail,
+:is([data-theme="lcars"], [data-theme="litho"]) .attachment-error {
+  color: var(--red);
+  font-size: 0.85rem;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-copy,
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-discard,
+:is([data-theme="lcars"], [data-theme="litho"]) .retry-uploads {
+  border: 1.5px solid var(--line-lcars);
+  border-radius: var(--radius-elbow);
+  background: var(--panel);
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-copy:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .retry-uploads:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .outbox-discard:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .attach-file-list li {
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+
+/* ---- Notify picker + subscription manager -------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .notify-picker {
+  border: 1.5px dashed var(--line);
+  border-radius: 4px 14px 14px 4px;
+  background: var(--panel);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .notify-picker > label {
+  color: var(--gold);
+  font-family: var(--display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .notify-chip {
+  background: var(--panel-2);
+  color: var(--gold);
+  border: 1px solid var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .notify-results button {
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .notify-results button:hover {
+  background: var(--panel-2);
+  color: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .subscription-row {
+  border-bottom: 1px solid var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .subscription-row button,
+:is([data-theme="lcars"], [data-theme="litho"]) .subscription-add button {
+  border: 1.5px solid var(--line);
+  border-radius: 4px 12px 12px 4px;
+  background: transparent;
+  color: var(--gold);
+  font-family: var(--display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .subscription-row button:hover,
+:is([data-theme="lcars"], [data-theme="litho"]) .subscription-add button:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .subscription-add label {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .subscription-empty {
+  color: var(--ink-soft);
+}
+
+/* ---- Projects (2026-09-09) ---------------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .pill {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--gold);
+  font-family: var(--display);
+  letter-spacing: 0.08em;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .pill--status-on_hold {
+  color: var(--peach);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .pill--status-completed {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .pill--overdue {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .project-lead,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-progress,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-item-meta,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-work-list small,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-activity-time,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-work-block h3 span,
+:is([data-theme="lcars"], [data-theme="litho"]) .filter-chip {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .project-progress-bar {
+  border: 1px solid var(--line-lcars);
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .project-progress-fill {
+  background: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .project-item,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-work-list li + li,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-activity li {
+  border-color: var(--line);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .project-item-title {
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .project-item--done .project-item-title {
+  color: var(--ink-dim);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .project-work-block h3,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-work-name {
+  color: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .project-work-list a,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-add-work a,
+:is([data-theme="lcars"], [data-theme="litho"]) .project-work-actions a {
+  color: var(--peach);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .text-button--danger {
+  color: var(--red);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .field-hint {
+  color: var(--peach);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-group--projects {
+  border-color: var(--line-lcars);
+  background: var(--panel);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .template-group--projects h2 {
+  color: var(--lilac);
+}
+
+/* ---- Setup designer (2026-09-09) ---------------------------------------- */
+
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-panel,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-feedline {
+  border: 1.5px solid var(--line-lcars);
+  border-radius: var(--radius-elbow);
+  background: var(--panel);
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-panel h3,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-feedline h4,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-palette-group summary {
+  color: var(--gold);
+  font-family: var(--display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-palette-item:hover {
+  background: var(--panel-2);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-palette-item small,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-inspector dt,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-numbers dt,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-results-status,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-saved-diff,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-feedline th {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-results-status--stale,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-warnings,
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-draft-notice {
+  color: var(--peach);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-feedline td {
+  color: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-band-fill {
+  fill: var(--panel);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-band-fill--even {
+  fill: var(--panel-2);
+}
+
+/* The port-number halo must match the band behind it in every theme. */
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-port-label {
+  stroke: var(--panel);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-band-label {
+  fill: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-chain-label,
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-feedline-label,
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-port-label,
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-part-label {
+  fill: var(--ink);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-line,
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-glyph-line {
+  stroke: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-glyph {
+  fill: var(--field);
+  stroke: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-glyph--coax {
+  fill: var(--ink-dim);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-glyph-dot {
+  fill: var(--gold);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-line--optical,
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-glyph--optical {
+  stroke: var(--lilac);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-glyph--optical {
+  fill: var(--field);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-device rect {
+  fill: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-device text {
+  fill: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-part--selected .rf-part-hit {
+  fill: rgb(255 153 0 / 14%);
+  stroke: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .rf-drop--armed {
+  fill: rgb(255 153 0 / 10%);
+  stroke: var(--orange);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-panel--collapsible summary small {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .setup-chain-direction,
+:is([data-theme="lcars"], [data-theme="litho"]) .icon-button {
+  color: var(--ink-soft);
+}
+
+:is([data-theme="lcars"], [data-theme="litho"]) .icon-button:hover {
+  background: var(--panel-2);
+  color: var(--red);
+}

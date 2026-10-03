@@ -1,0 +1,115 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm run build
+      - run: npx vitest run
+
+  test-sqlite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -e '.[dev,labdata]'
+      - run: pytest -v
+
+  test-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: autolab
+          POSTGRES_PASSWORD: autolab
+          POSTGRES_DB: autolab_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U autolab" --health-interval 5s
+          --health-timeout 3s --health-retries 10
+    env:
+      AUTOLAB_TEST_DB_URL: postgresql+psycopg://autolab:autolab@localhost:5432/autolab_test
+      AUTOLAB_DB_URL: postgresql+psycopg://autolab:autolab@localhost:5432/autolab_test
+      AUTOLAB_PG_URL: postgresql://autolab:autolab@localhost:5432/autolab_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -e '.[dev,labdata]'
+      - run: python -m alembic upgrade head   # real migration execution
+      - run: pytest -v                        # full suite on Postgres
+      - name: Seed backup restore sentinel
+        run: |
+          python - <<'PY'
+          import os
+
+          from sqlmodel import Session
+
+          from labcore.db import make_engine
+          from labcore.service import create_entity
+
+          engine = make_engine(os.environ["AUTOLAB_TEST_DB_URL"])
+          with Session(engine) as session:
+              create_entity(
+                  session,
+                  "wafer",
+                  {"name": "CI backup restore sentinel"},
+                  source_key="ci:backup-restore-sentinel",
+              )
+              session.commit()
+          engine.dispose()
+          PY
+      # This container round-trip is automated; live-host acceptance remains
+      # outstanding until it can be exercised on the deployment host.
+      - name: Create backup archive
+        id: backup
+        env:
+          POSTGRES_CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: |
+          docker cp scripts/backup.sh "$POSTGRES_CONTAINER_ID:/tmp/backup.sh"
+          docker cp scripts/restore.sh "$POSTGRES_CONTAINER_ID:/tmp/restore.sh"
+          dump_file=$(
+            docker exec "$POSTGRES_CONTAINER_ID" \
+              /tmp/backup.sh "$AUTOLAB_PG_URL" /tmp/autolab-backups 1
+          )
+          echo "dump_file=$dump_file" >> "$GITHUB_OUTPUT"
+      - name: Recreate empty database schema
+        env:
+          POSTGRES_CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: |
+          docker exec "$POSTGRES_CONTAINER_ID" \
+            psql "$AUTOLAB_PG_URL" --set ON_ERROR_STOP=1 \
+            --command 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
+      - name: Restore backup archive
+        env:
+          POSTGRES_CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: |
+          docker exec --env AUTOLAB_PG_URL="$AUTOLAB_PG_URL" \
+            "$POSTGRES_CONTAINER_ID" \
+            /tmp/restore.sh "${{ steps.backup.outputs.dump_file }}" --yes
+      - name: Verify restored sentinel row
+        env:
+          POSTGRES_CONTAINER_ID: ${{ job.services.postgres.id }}
+        run: |
+          row_count=$(
+            docker exec "$POSTGRES_CONTAINER_ID" \
+              psql "$AUTOLAB_PG_URL" --tuples-only --no-align \
+              --command "SELECT count(*) FROM entity_registry WHERE source_key = 'ci:backup-restore-sentinel';"
+          )
+          if [[ "$row_count" != "1" ]]; then
+            echo "expected one restored sentinel row, got: $row_count" >&2
+            exit 1
+          fi

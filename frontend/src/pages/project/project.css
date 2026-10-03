@@ -1,0 +1,230 @@
+.pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.pill--status-active {
+  background: #dcefdf;
+  color: #1f5a2d;
+}
+
+.pill--status-on_hold {
+  background: #f6e8c8;
+  color: #6f4f0a;
+}
+
+.pill--status-completed {
+  background: #e4e1d8;
+  color: #4d514c;
+}
+
+.pill--overdue {
+  background: #f8d9d3;
+  color: #8f2c1f;
+}
+
+.project-lead {
+  margin: 10px 0 0;
+  color: #4d514c;
+}
+
+.project-progress {
+  display: grid;
+  margin-top: 14px;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.project-progress-bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e7e2d6;
+}
+
+.project-progress-fill {
+  height: 100%;
+  background: #2f7a45;
+  transition: width 200ms ease;
+}
+
+.project-add-work {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  gap: 8px 14px;
+}
+
+.project-item-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  padding: 10px 0;
+  gap: 12px;
+  border-bottom: 1px solid #ece7db;
+}
+
+.project-item--done .project-item-title {
+  color: #7a847f;
+  text-decoration: line-through;
+}
+
+.project-item-check input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+
+.project-item-title {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: text;
+}
+
+.project-item-title-input {
+  width: 100%;
+}
+
+.project-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 4px;
+  gap: 10px;
+  color: #66706a;
+  font-size: 0.82rem;
+}
+
+.project-item-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.text-button--danger {
+  color: #a63d2f;
+}
+
+.project-item-add {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  gap: 8px;
+}
+
+.project-item-add input[type="text"] {
+  flex: 1 1 200px;
+}
+
+.project-work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.project-work-block h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.project-work-block h3 span {
+  color: #7a847f;
+  font-weight: 400;
+}
+
+.project-work-actions {
+  display: flex;
+  gap: 12px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.project-work-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-work-list li + li {
+  border-top: 1px solid #ece7db;
+}
+
+.project-work-list a {
+  display: grid;
+  padding: 7px 0;
+  gap: 2px;
+  text-decoration: none;
+}
+
+.project-work-list small {
+  color: #66706a;
+}
+
+.project-activity {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-activity li {
+  display: grid;
+  grid-template-columns: minmax(140px, auto) 1fr;
+  padding: 6px 0;
+  gap: 12px;
+  border-bottom: 1px solid #ece7db;
+  font-size: 0.9rem;
+}
+
+.project-activity-time {
+  color: #66706a;
+  white-space: nowrap;
+}
+
+.filter-chip {
+  margin: 6px 0 0;
+  color: #4d514c;
+  font-size: 0.9rem;
+}
+
+.project-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  margin-top: 16px;
+  gap: 12px;
+}
+
+.project-card {
+  display: grid;
+  padding: 12px 14px;
+  gap: 6px;
+  border: 1px solid #ded8ca;
+  border-radius: 14px;
+  background: #fffdf8;
+  text-decoration: none;
+}
+
+.project-card .pill {
+  justify-self: start;
+}
+
+.project-card-name {
+  font-weight: 600;
+}
+
+.project-card small {
+  color: #66706a;
+}

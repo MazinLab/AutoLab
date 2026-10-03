@@ -1,0 +1,741 @@
+[
+  {
+    "name": "Project",
+    "entity_type": "project",
+    "group": "projects",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Project Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "description",
+        "label": "Description",
+        "type": "text"
+      },
+      {
+        "name": "status",
+        "label": "Status",
+        "type": "select",
+        "options": [
+          "active",
+          "on_hold",
+          "completed"
+        ],
+        "default": "active"
+      },
+      {
+        "name": "lead",
+        "label": "Lead",
+        "type": "entity"
+      }
+    ],
+    "body": false
+  },
+  {
+    "name": "Design",
+    "entity_type": "design",
+    "group": "fab",
+    "attachments": true,
+    "fields": [
+      {
+        "name": "name",
+        "label": "Design Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "entity"
+      },
+      {
+        "name": "description",
+        "label": "Description",
+        "type": "text"
+      },
+      {
+        "name": "repo_url",
+        "label": "Repository URL",
+        "type": "text"
+      },
+      {
+        "name": "git_commit",
+        "label": "Git Commit or Tag",
+        "type": "text"
+      },
+      {
+        "name": "layout_tool",
+        "label": "Layout Tool",
+        "type": "text"
+      }
+    ],
+    "body": false
+  },
+  {
+    "name": "Substrate Batch",
+    "entity_type": "substrate_batch",
+    "group": "fab",
+    "attachments": true,
+    "fields": [
+      {
+        "name": "name",
+        "label": "Batch or Lot Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "entity"
+      },
+      {
+        "name": "vendor",
+        "label": "Vendor",
+        "type": "text"
+      },
+      {
+        "name": "material",
+        "label": "Material",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "diameter_mm",
+        "label": "Diameter",
+        "type": "number",
+        "unit": "mm"
+      },
+      {
+        "name": "thickness_um",
+        "label": "Thickness",
+        "type": "number",
+        "unit": "\u00b5m"
+      },
+      {
+        "name": "resistivity",
+        "label": "Resistivity",
+        "type": "text"
+      },
+      {
+        "name": "orientation",
+        "label": "Orientation",
+        "type": "text"
+      },
+      {
+        "name": "spec",
+        "label": "Spec",
+        "type": "text"
+      },
+      {
+        "name": "wafer_count",
+        "label": "Wafer Count",
+        "type": "number"
+      }
+    ],
+    "body": false,
+    "batch": true
+  },
+  {
+    "name": "Wafer",
+    "entity_type": "wafer",
+    "group": "fab",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Wafer Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "substrate",
+        "label": "Substrate Batch",
+        "type": "entity"
+      },
+      {
+        "name": "design",
+        "label": "Design",
+        "type": "entity"
+      },
+      {
+        "name": "diameter_mm",
+        "label": "Diameter",
+        "type": "number",
+        "unit": "mm"
+      }
+    ],
+    "body": false,
+    "batch": true
+  },
+  {
+    "name": "Device",
+    "entity_type": "device",
+    "group": "fab",
+    "attachments": true,
+    "fields": [
+      {
+        "name": "name",
+        "label": "Device Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "wafer",
+        "label": "Source Wafer",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "device_type",
+        "label": "Device Type",
+        "type": "text"
+      }
+    ],
+    "body": false,
+    "notify": true,
+    "batch": true
+  },
+  {
+    "name": "Fab Recipe",
+    "entity_type": "fab_recipe",
+    "group": "fab",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Recipe Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "entity"
+      },
+      {
+        "name": "description",
+        "label": "Description",
+        "type": "text"
+      }
+    ],
+    "body": true
+  },
+  {
+    "name": "Fab Step",
+    "entity_type": "fab_step",
+    "group": "fab",
+    "fields": [
+      {
+        "name": "wafer",
+        "label": "Wafer",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "recipe",
+        "label": "Recipe",
+        "type": "entity"
+      },
+      {
+        "name": "instrument",
+        "label": "Machine",
+        "type": "entity"
+      },
+      {
+        "name": "step_index",
+        "label": "Step Index",
+        "type": "number",
+        "required": true
+      }
+    ],
+    "body": true,
+    "attachments": true
+  },
+  {
+    "name": "Fab Note",
+    "entity_type": "note",
+    "group": "fab",
+    "fields": [
+      {
+        "name": "wafer",
+        "label": "Wafer",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "process_step",
+        "label": "Process Step",
+        "type": "text"
+      },
+      {
+        "name": "observations",
+        "label": "Observations",
+        "type": "text"
+      }
+    ],
+    "body": true
+  },
+  {
+    "name": "Wafer Measurement",
+    "entity_type": "measurement_run",
+    "group": "fab",
+    "attachments": true,
+    "fields": [
+      {
+        "name": "name",
+        "label": "Title",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "wafer",
+        "label": "Wafer",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "instrument",
+        "label": "Instrument",
+        "type": "entity"
+      },
+      {
+        "name": "kind",
+        "label": "Measurement Kind",
+        "type": "text"
+      }
+    ],
+    "body": true,
+    "notify": true
+  },
+  {
+    "name": "Maintenance",
+    "entity_type": "note",
+    "group": "fab",
+    "fields": [
+      {
+        "name": "instrument",
+        "label": "Instrument",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "issue",
+        "label": "Issue",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "work_performed",
+        "label": "Work Performed",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "body": true
+  },
+  {
+    "name": "Fab Equipment",
+    "entity_type": "instrument",
+    "group": "fab",
+    "defaults": {
+      "category": "fab"
+    },
+    "fields": [
+      {
+        "name": "name",
+        "label": "Common Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "kind",
+        "label": "Kind",
+        "type": "text"
+      },
+      {
+        "name": "location",
+        "label": "Location",
+        "type": "text"
+      },
+      {
+        "name": "manufacturer_model",
+        "label": "Manufacturer and Model",
+        "type": "text"
+      },
+      {
+        "name": "serial_number",
+        "label": "Serial or Asset Tag",
+        "type": "text"
+      }
+    ],
+    "body": false,
+    "attachments": true,
+    "batch": true
+  },
+  {
+    "name": "Testbed",
+    "entity_type": "instrument",
+    "group": "testing",
+    "defaults": {
+      "category": "testbed"
+    },
+    "fields": [
+      {
+        "name": "name",
+        "label": "Common Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "kind",
+        "label": "Kind",
+        "type": "select",
+        "options": [
+          "dilution_refrigerator",
+          "adr",
+          "lhe_dewar",
+          "probe_station",
+          "optical_breadboard",
+          "other"
+        ]
+      },
+      {
+        "name": "location",
+        "label": "Location",
+        "type": "text"
+      },
+      {
+        "name": "manufacturer_model",
+        "label": "Manufacturer and Model",
+        "type": "text"
+      },
+      {
+        "name": "serial_number",
+        "label": "Serial or Asset Tag",
+        "type": "text"
+      },
+      {
+        "name": "base_temp_mk",
+        "label": "Base Temperature",
+        "type": "number",
+        "unit": "mK"
+      },
+      {
+        "name": "rf_input_lines",
+        "label": "RF Input Lines",
+        "type": "number"
+      },
+      {
+        "name": "rf_output_lines",
+        "label": "RF Output Lines",
+        "type": "number"
+      }
+    ],
+    "body": false,
+    "attachments": true,
+    "batch": true
+  },
+  {
+    "name": "Experimental Equipment",
+    "entity_type": "instrument",
+    "group": "testing",
+    "defaults": {
+      "category": "experimental"
+    },
+    "fields": [
+      {
+        "name": "name",
+        "label": "Common Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "kind",
+        "label": "Kind",
+        "type": "text"
+      },
+      {
+        "name": "location",
+        "label": "Location",
+        "type": "text"
+      },
+      {
+        "name": "manufacturer_model",
+        "label": "Manufacturer and Model",
+        "type": "text"
+      },
+      {
+        "name": "serial_number",
+        "label": "Serial or Asset Tag",
+        "type": "text"
+      },
+      {
+        "name": "gain_db",
+        "label": "Gain at 6 GHz",
+        "type": "number",
+        "unit": "dB"
+      },
+      {
+        "name": "noise_temp_k",
+        "label": "Noise Temperature",
+        "type": "number",
+        "unit": "K"
+      }
+    ],
+    "body": false,
+    "attachments": true,
+    "batch": true
+  },
+  {
+    "name": "Experiment Setup",
+    "entity_type": "experiment_setup",
+    "group": "testing",
+    "attachments": true,
+    "fields": [
+      {
+        "name": "name",
+        "label": "Setup Title",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "instrument",
+        "label": "Instrument",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "started_at",
+        "label": "Started At",
+        "type": "datetime",
+        "required": true
+      },
+      {
+        "name": "base_temp_mk",
+        "label": "Base Temperature",
+        "type": "number",
+        "unit": "mK"
+      }
+    ],
+    "body": true,
+    "start_from": {
+      "field": "instrument"
+    }
+  },
+  {
+    "name": "Experiment",
+    "entity_type": "note",
+    "group": "testing",
+    "fields": [
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "sample",
+        "label": "Sample or Device",
+        "type": "entity"
+      },
+      {
+        "name": "instrument",
+        "label": "Instrument",
+        "type": "entity"
+      },
+      {
+        "name": "setup",
+        "label": "Experiment Setup",
+        "type": "entity"
+      },
+      {
+        "name": "name",
+        "label": "Log Title",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "body": true,
+    "notify": true
+  },
+  {
+    "name": "Analysis",
+    "entity_type": "analysis_run",
+    "group": "testing",
+    "attachments": true,
+    "fields": [
+      {
+        "name": "name",
+        "label": "Analysis Title",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "entity",
+        "required": true
+      },
+      {
+        "name": "experiment",
+        "label": "Experiment",
+        "type": "entity"
+      },
+      {
+        "name": "software",
+        "label": "Analysis Software",
+        "type": "entity"
+      },
+      {
+        "name": "git_commit",
+        "label": "Git Commit or Tag",
+        "type": "text"
+      },
+      {
+        "name": "results",
+        "label": "Results",
+        "type": "results"
+      },
+      {
+        "name": "result_summary",
+        "label": "Result Summary",
+        "type": "entity"
+      }
+    ],
+    "body": true,
+    "notify": true
+  },
+  {
+    "name": "Analysis Software",
+    "entity_type": "software",
+    "group": "testing",
+    "attachments": true,
+    "fields": [
+      {
+        "name": "name",
+        "label": "Software Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "project",
+        "label": "Project",
+        "type": "entity"
+      },
+      {
+        "name": "description",
+        "label": "Description",
+        "type": "text"
+      },
+      {
+        "name": "version",
+        "label": "Version",
+        "type": "text"
+      },
+      {
+        "name": "git_commit",
+        "label": "Git Commit or Tag",
+        "type": "text"
+      },
+      {
+        "name": "url",
+        "label": "Repository URL",
+        "type": "text"
+      }
+    ],
+    "body": false
+  },
+  {
+    "name": "Result Summary",
+    "entity_type": "result_summary",
+    "group": "testing",
+    "attachments": true,
+    "fields": [
+      {
+        "name": "name",
+        "label": "Title",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "description",
+        "label": "Description",
+        "type": "text"
+      }
+    ],
+    "body": true,
+    "notify": true
+  },
+  {
+    "name": "Person",
+    "entity_type": "person",
+    "group": "other",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Full Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "email",
+        "label": "Email",
+        "type": "text"
+      },
+      {
+        "name": "tailscale_login",
+        "label": "Tailscale Login",
+        "type": "text"
+      },
+      {
+        "name": "slack_id",
+        "label": "Slack Member ID",
+        "type": "text"
+      }
+    ],
+    "body": false
+  },
+  {
+    "name": "Agent",
+    "entity_type": "agent",
+    "group": "other",
+    "fields": [
+      {
+        "name": "name",
+        "label": "Agent Name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "model",
+        "label": "Model",
+        "type": "text"
+      },
+      {
+        "name": "operator",
+        "label": "Operator",
+        "type": "entity"
+      }
+    ],
+    "body": false
+  }
+]

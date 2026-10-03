@@ -1,0 +1,426 @@
+.setup-designer {
+  display: grid;
+  gap: 18px;
+}
+
+.setup-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.setup-toolbar .spacer {
+  flex: 1;
+}
+
+.setup-draft-notice {
+  margin: 0;
+  color: #6f4f0a;
+  font-size: 0.85rem;
+}
+
+/* The drawing takes the full width; the control panels sit below it in
+   a row that wraps, so a wider window means a bigger schematic. */
+.setup-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+.setup-canvas {
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.setup-schematic {
+  display: block;
+  width: 100%;
+  min-width: 420px;
+  height: auto;
+  font-family: inherit;
+}
+
+.rf-band-fill {
+  fill: #f6f3ea;
+}
+
+.rf-band-fill--even {
+  fill: #efeadc;
+}
+
+.rf-band-label {
+  fill: #66706a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rf-chain-label,
+.rf-feedline-label,
+.rf-port-label {
+  fill: #29443e;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Port numbers sit next to fan lines and stubs; a halo keeps the digit
+   readable where a line passes close by. */
+.rf-port-label {
+  paint-order: stroke;
+  stroke: #f6f3ea;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.rf-line {
+  stroke: #29443e;
+  stroke-width: 2;
+}
+
+.rf-line--fan {
+  stroke-dasharray: 4 3;
+}
+
+.rf-line--optical {
+  stroke: #b0568e;
+  stroke-dasharray: 2 4;
+}
+
+.rf-chain--inactive .rf-line,
+.rf-chain--inactive text {
+  opacity: 0.35;
+}
+
+.rf-glyph {
+  fill: #fffdf8;
+  stroke: #29443e;
+  stroke-width: 1.6;
+}
+
+.rf-glyph--coax {
+  fill: #c9d7d1;
+}
+
+.rf-glyph--optical {
+  stroke: #b0568e;
+  fill: #fbe8f3;
+}
+
+.rf-glyph-line {
+  fill: none;
+  stroke: #29443e;
+  stroke-width: 1.6;
+}
+
+.rf-glyph-dot {
+  fill: #29443e;
+}
+
+.rf-part {
+  cursor: pointer;
+}
+
+.rf-part-hit {
+  fill: transparent;
+}
+
+.rf-part--selected .rf-part-hit {
+  fill: rgb(0 105 127 / 12%);
+  stroke: #00697f;
+  stroke-width: 1.5;
+  rx: 6;
+}
+
+.rf-part-label {
+  fill: #29443e;
+  font-size: 11px;
+}
+
+.rf-device rect {
+  fill: #8c481f;
+}
+
+.rf-device text {
+  fill: #8c481f;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.rf-drop {
+  fill: transparent;
+}
+
+.rf-drop--armed {
+  fill: rgb(0 105 127 / 8%);
+  stroke: #00697f;
+  stroke-dasharray: 3 3;
+}
+
+.setup-side {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
+  gap: 14px;
+}
+
+.setup-panel {
+  padding: 12px 14px;
+  border: 1px solid #ded8ca;
+  border-radius: 12px;
+  background: #fffdf8;
+}
+
+.setup-panel h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+}
+
+.setup-palette-group {
+  margin-bottom: 8px;
+}
+
+.setup-palette-group summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.setup-palette-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+  gap: 8px;
+  border-radius: 6px;
+  cursor: grab;
+  font-size: 0.85rem;
+}
+
+.setup-palette-item:hover {
+  background: #f1ede2;
+}
+
+.setup-palette-item small {
+  color: #66706a;
+}
+
+.setup-inspector dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  margin: 0 0 8px;
+  gap: 4px 10px;
+  font-size: 0.85rem;
+}
+
+.setup-inspector dt {
+  color: #66706a;
+}
+
+.setup-inspector dd {
+  margin: 0;
+}
+
+.setup-inspector-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+/* Fixed columns so the remove control never wraps to its own line. */
+.setup-chain-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3.6em minmax(0, 4.5em) auto;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.setup-stage-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 5em) auto auto;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.setup-chain-direction {
+  color: #66706a;
+  white-space: nowrap;
+}
+
+.setup-chain-row input[type="text"],
+.setup-stage-row input {
+  width: 100%;
+  min-width: 0;
+}
+
+.setup-stage-row + .setup-stage-row,
+.setup-chain-row + .setup-chain-row {
+  margin-top: 6px;
+}
+
+
+.setup-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.setup-feedline {
+  padding: 10px 12px;
+  border: 1px solid #ded8ca;
+  border-radius: 10px;
+  background: #fffdf8;
+}
+
+.setup-feedline h4 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.setup-feedline table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.setup-feedline th,
+.setup-feedline td {
+  padding: 2px 4px;
+  text-align: right;
+}
+
+.setup-feedline th:first-child,
+.setup-feedline td:first-child {
+  text-align: left;
+}
+
+.setup-numbers {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  margin: 0 0 6px;
+  gap: 2px 10px;
+  font-size: 0.85rem;
+}
+
+.setup-numbers dt {
+  color: #66706a;
+}
+
+.setup-numbers dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.setup-results-status {
+  margin: 0;
+  color: #66706a;
+  font-size: 0.85rem;
+}
+
+.setup-results-status--stale {
+  color: #6f4f0a;
+}
+
+.setup-warnings {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: #6f4f0a;
+  font-size: 0.85rem;
+}
+
+.setup-saved-diff {
+  margin: 4px 0 0;
+  color: #7a847f;
+  font-size: 0.8rem;
+}
+
+.setup-device-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 4px 6px;
+  font-size: 0.85rem;
+}
+
+.setup-device-row select {
+  min-width: 0;
+}
+
+.setup-device-search {
+  grid-column: 2 / -1;
+}
+
+.icon-button.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.setup-device-label {
+  font-weight: 600;
+}
+
+.rf-feedline-label--device {
+  font-weight: 700;
+}
+
+.setup-panel--collapsible {
+  grid-column: 1 / -1;
+}
+
+.setup-panel--collapsible summary {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  cursor: pointer;
+  list-style: revert;
+}
+
+.setup-panel--collapsible summary h3 {
+  display: inline;
+  margin: 0;
+}
+
+.setup-panel--collapsible summary small {
+  color: #66706a;
+}
+
+.setup-panel--collapsible[open] summary {
+  margin-bottom: 8px;
+}
+
+/* Designer panels are dense lists; the 44 px touch target on text
+   buttons would double every row's height. */
+.setup-panel .text-button {
+  min-height: 24px;
+  line-height: 1.2;
+}
+
+.setup-palette-item {
+  padding: 2px 6px;
+}
+
+.setup-palette-group {
+  margin-bottom: 4px;
+}
+
+.setup-palette-group summary {
+  padding: 2px 0;
+}
+
+.setup-port {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.setup-port-target {
+  color: #66706a;
+}

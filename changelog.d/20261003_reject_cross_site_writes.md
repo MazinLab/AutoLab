@@ -1,0 +1,1 @@
+Writes whose `Origin` header names another site are rejected with 403. Identity comes from the tailnet address, so before this a page on another site, opened by a lab member on the tailnet, could upload files that AutoLab recorded as theirs. The app's own pages, scripts, instrument PCs, and MCP clients are unaffected.

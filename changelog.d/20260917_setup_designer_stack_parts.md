@@ -1,0 +1,1 @@
+Setup designer: dropping a library part onto a part that already occupies a stage adds it to the same stage, so two ZVAs at 300 K or a paramp plus circulator at base temperature stack in one band. "+ Add to…" from the palette now defaults to a chain that accepts the part instead of always the first chain.

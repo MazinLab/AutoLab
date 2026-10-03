@@ -1,0 +1,91 @@
+services:
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: autolab
+      POSTGRES_PASSWORD: ${AUTOLAB_PG_PASSWORD:?set in .env}
+      POSTGRES_RO_PASSWORD: ${POSTGRES_RO_PASSWORD:?set in .env}
+      POSTGRES_DB: autolab
+    # Loopback-only host port so scripts/backup.sh can reach the database
+    # from the host without exposing it to the network.
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./compose/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U autolab -d autolab"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      AUTOLAB_DB_URL: postgresql+psycopg://autolab:${AUTOLAB_PG_PASSWORD:?set in .env}@postgres/autolab
+      AUTOLAB_READONLY_DB_URL: ${AUTOLAB_READONLY_DB_URL:?set in .env}
+      AUTOLAB_STORAGE_ROOT: /data/artifacts
+      # Tailscale identity can arrive through native Headscale whois via Caddy
+      # (the Docker gateway) or the dedicated personal-tailnet Serve proxy
+      # at its pinned container address (see networks:).
+      AUTOLAB_IDENTITY_MODE: ${AUTOLAB_IDENTITY_MODE:-tailscale-hybrid}
+      AUTOLAB_IDENTITY_TRUSTED_PROXIES: ${AUTOLAB_IDENTITY_TRUSTED_PROXIES:-["172.28.0.1","172.28.255.254","127.0.0.1","::1"]}
+      # Secure by default: production anonymous access is read-only unless
+      # a deployment explicitly opts out.
+      AUTOLAB_REQUIRE_IDENTITY_FOR_WRITES: ${AUTOLAB_REQUIRE_IDENTITY_FOR_WRITES:-true}
+      # Label destinations stay deployment-configurable so a printer can move
+      # from the private eno4 link to a routed address without rebuilding.
+      AUTOLAB_PRINTERS: ${AUTOLAB_PRINTERS:-{}}
+      AUTOLAB_DEFAULT_PRINTER: ${AUTOLAB_DEFAULT_PRINTER:-}
+      AUTOLAB_PUBLIC_BASE_URL: ${AUTOLAB_PUBLIC_BASE_URL:-https://autolab.physics.ucsb.edu}
+      # Label dates print in lab-local time; the server clock is UTC.
+      AUTOLAB_LABEL_TIMEZONE: ${AUTOLAB_LABEL_TIMEZONE:-America/Los_Angeles}
+    volumes:
+      # Host/NAS artifact store; labdata writers and the app must see the
+      # same files, so this is a bind mount, not a container-local volume.
+      - ${AUTOLAB_STORAGE_HOST_DIR:?set in .env}:/data/artifacts
+      # tailscale-whois identity mode asks the host tailscaled who a tailnet
+      # client address belongs to. Harmless when the mode is off.
+      - ${AUTOLAB_TAILSCALED_SOCKET:-/var/run/tailscale/tailscaled.sock}:/var/run/tailscale/tailscaled.sock
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  watcher:
+    build: .
+    restart: unless-stopped
+    environment:
+      AUTOLAB_DB_URL: postgresql+psycopg://autolab:${AUTOLAB_PG_PASSWORD:?set in .env}@postgres/autolab
+      AUTOLAB_STORAGE_ROOT: /data/artifacts
+    volumes:
+      - ${AUTOLAB_STORAGE_HOST_DIR:?set in .env}:/data/artifacts
+    command: ["sh", "-c", "while true; do python -m app.watcher; sleep 300; done"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  notifier:
+    build: .
+    restart: unless-stopped
+    environment:
+      AUTOLAB_DB_URL: postgresql+psycopg://autolab:${AUTOLAB_PG_PASSWORD:?set in .env}@postgres/autolab
+      AUTOLAB_SLACK_BOT_TOKEN: ${AUTOLAB_SLACK_BOT_TOKEN:-}
+      AUTOLAB_PUBLIC_BASE_URL: ${AUTOLAB_PUBLIC_BASE_URL:-https://autolab.physics.ucsb.edu}
+    command: ["python", "-m", "app.notifier"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+
+networks:
+  # Pinned subnet so the host gateway address is deterministic — the identity
+  # middleware trusts the tailscale serve proxy by exact IP.
+  default:
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.0.1
