@@ -46,8 +46,12 @@ services:
       # same files, so this is a bind mount, not a container-local volume.
       - ${AUTOLAB_STORAGE_HOST_DIR:?set in .env}:/data/artifacts
       # tailscale-whois identity mode asks the host tailscaled who a tailnet
-      # client address belongs to. Harmless when the mode is off.
-      - ${AUTOLAB_TAILSCALED_SOCKET:-/var/run/tailscale/tailscaled.sock}:/var/run/tailscale/tailscaled.sock
+      # client address belongs to. Harmless when the mode is off. Mount the
+      # directory, not the socket: tailscaled recreates the socket on every
+      # restart, and a file mount keeps pointing at the deleted one. The host
+      # unit needs RuntimeDirectoryPreserve=yes so the directory itself
+      # survives restarts (README, deployment step 4).
+      - ${AUTOLAB_TAILSCALED_SOCKET_DIR:-/var/run/tailscale}:/var/run/tailscale
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:

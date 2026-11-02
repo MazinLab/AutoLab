@@ -292,8 +292,17 @@ The compose defaults already match this setup. Check these points:
 - `AUTOLAB_IDENTITY_MODE` is `tailscale-whois` or `tailscale-hybrid`.
 - `AUTOLAB_IDENTITY_TRUSTED_PROXIES` contains the Docker gateway (`172.28.0.1`
   on the pinned compose network). Caddy reaches the published port through it.
-- The host's `tailscaled.sock` is mounted into the app container. Set
-  `AUTOLAB_TAILSCALED_SOCKET` if it is not at `/var/run/tailscale/`.
+- The host's tailscaled socket directory is mounted into the app container.
+  Set `AUTOLAB_TAILSCALED_SOCKET_DIR` if it is not `/var/run/tailscale`.
+- The host keeps that directory across tailscaled restarts. Otherwise systemd
+  deletes it and the container loses whois until it is restarted:
+
+  ```bash
+  sudo mkdir -p /etc/systemd/system/tailscaled.service.d
+  printf '[Service]\nRuntimeDirectoryPreserve=yes\n' |
+    sudo tee /etc/systemd/system/tailscaled.service.d/preserve-socket-dir.conf
+  sudo systemctl daemon-reload
+  ```
 - `AUTOLAB_REQUIRE_IDENTITY_FOR_WRITES=true`.
 
 ### 5. Enroll a person
