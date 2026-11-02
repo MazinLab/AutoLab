@@ -21,10 +21,10 @@ if _attr_url:
 elif os.environ.get("AUTOLAB_DB_URL"):
     config.set_main_option("sqlalchemy.url", os.environ["AUTOLAB_DB_URL"])
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
+# Interpret the config file for Python logging. Keep existing loggers:
+# migrations run in-process (tests) would otherwise silence app loggers.
 if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
 
 import labcore.models
 from sqlmodel import SQLModel

@@ -328,7 +328,7 @@ def test_whois_mode_untrusted_peer_never_reaches_whois(
 
 
 def test_whois_mode_survives_dead_tailscaled_socket(
-    engine: Engine, tmp_path: Path
+    engine: Engine, tmp_path: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
     identity_module._whois_cache.clear()
     settings = Settings(
@@ -347,6 +347,7 @@ def test_whois_mode_survives_dead_tailscaled_socket(
         ).json()
     assert out["login"] is None
     assert wafer["created_by_id"] is None
+    assert "absent.sock unreachable" in caplog.text
     identity_module._whois_cache.clear()
 
 

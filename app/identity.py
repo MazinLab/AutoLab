@@ -32,6 +32,7 @@ import asyncio
 import http.client
 import ipaddress
 import json
+import logging
 import socket
 import time
 import urllib.parse
@@ -43,6 +44,8 @@ from sqlmodel import Session, select
 from labcore.events import reset_submitted_by, set_submitted_by
 from labcore.models.entities import Person, PersonNetworkIdentity
 from labcore.service import get_entity
+
+logger = logging.getLogger(__name__)
 
 LOGIN_HEADER = "Tailscale-User-Login"
 FORWARDED_HEADER = "X-Forwarded-For"
@@ -94,7 +97,15 @@ def _whois_login(socket_path: str, client_ip: str) -> str | None:
         if response.status != 200:
             return None
         payload = json.loads(response.read())
-    except (OSError, ValueError):
+    except OSError as exc:
+        # Unlike an unknown peer, this silently drops every tailnet client to
+        # read only. The whois cache limits it to one line per client
+        # address per minute.
+        logger.warning(
+            "tailscaled whois socket %s unreachable: %s", socket_path, exc
+        )
+        return None
+    except ValueError:
         return None
     finally:
         connection.close()
